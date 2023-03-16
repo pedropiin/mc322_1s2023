@@ -14,6 +14,71 @@ public class Cliente {
 		this.dataNascimento = dataNascimento;
 		this.endereco = endereco;
 	}
+
+	public boolean charsIguais(String s) {
+		for (int i = 0; i < s.length(); i++) {
+			if (s.charAt(0) != s.charAt(i)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean digitosCpfValidos(String s) {
+		int soma = 0;
+		int fatorInicial = 10;
+		int resto = 0;
+		for (int i = 0; i < s.length() - 2; i++) {
+			soma += Character.getNumericValue(s.charAt(i)) * (fatorInicial - i);
+		}
+
+		resto = soma % 11;
+		if (resto < 10) {
+			if (s.charAt(9) != resto) {
+				return false;
+			}
+		} else {
+			if (s.charAt(9) != 0) {
+				return false;
+			}
+		}
+
+		soma = 0;
+		fatorInicial = 11;
+		for (int i = 0; i < s.length - 1; i++) {
+			soma += Character.getNumericValue(s.charAt(i)) * (fatorInicial - i);
+		}
+
+		resto = soma % 11;
+		if (resto < 10) {
+			if (s.charAt(10) != resto) {
+				return false;
+			}
+		} else {
+			if (s.charAt(10) != 0) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public boolean validarCPF(String cpf) {
+		String cpfAlterado = cpf.replaceAll(".","");
+
+		if (cpfAlterado.length() != 11) {
+			return false;
+		}
+
+		if (charsIguais(cpfAlterado)) {
+			return false;
+		}
+
+		if (!digitosCpfValidos(cpfAlterado)) {
+			return false;
+		}
+		return true;
+	}
 	
 	public int getIdade() {
 		return idade;
