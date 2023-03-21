@@ -15,6 +15,10 @@ public class Cliente {
 		this.endereco = endereco;
 	}
 
+	public String toString() {
+		return this.nome;
+	}
+
 	public boolean charsIguais(String s) {
 		for (int i = 0; i < s.length(); i++) {
 			if (s.charAt(0) != s.charAt(i)) {
@@ -29,33 +33,33 @@ public class Cliente {
 		int fatorInicial = 10;
 		int resto = 0;
 		for (int i = 0; i < s.length() - 2; i++) {
-			soma += Character.getNumericValue(s.charAt(i)) * (fatorInicial - i);
+			soma += (Character.getNumericValue(s.charAt(i)) * (fatorInicial - i));
 		}
 
 		resto = soma % 11;
-		if (resto < 10) {
-			if (s.charAt(9) != resto) {
+		if (resto < 2) {
+			if (Character.getNumericValue(s.charAt(9)) != 0) {
 				return false;
 			}
 		} else {
-			if (s.charAt(9) != 0) {
+			if (Character.getNumericValue(s.charAt(9)) != (11 - resto)) {
 				return false;
 			}
 		}
 
 		soma = 0;
 		fatorInicial = 11;
-		for (int i = 0; i < s.length - 1; i++) {
+		for (int i = 0; i < s.length() - 1; i++) {
 			soma += Character.getNumericValue(s.charAt(i)) * (fatorInicial - i);
 		}
 
 		resto = soma % 11;
-		if (resto < 10) {
-			if (s.charAt(10) != resto) {
+		if (resto < 2) {
+			if (Character.getNumericValue(s.charAt(10)) != 0) {
 				return false;
 			}
 		} else {
-			if (s.charAt(10) != 0) {
+			if (Character.getNumericValue(s.charAt(10)) != (11 - resto)) {
 				return false;
 			}
 		}
@@ -63,8 +67,22 @@ public class Cliente {
 		return true;
 	}
 
+	public boolean charsNumericos(String cpf) {
+		for (int i = 0; i < cpf.length(); i++) {
+			if (!Character.isDigit(cpf.charAt(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public boolean validarCPF(String cpf) {
-		String cpfAlterado = cpf.replaceAll(".","");
+		String cpf1 = cpf.replaceAll("\\.","");
+		String cpfAlterado = cpf1.replaceAll("\\-", "");
+
+		if (!charsNumericos(cpfAlterado)) {
+			return false;
+		}
 
 		if (cpfAlterado.length() != 11) {
 			return false;

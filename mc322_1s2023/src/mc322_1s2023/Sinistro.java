@@ -8,7 +8,7 @@ public class Sinistro {
 	private String data;
 	private String endereco;
 	
-	private Sinistro(String data, String endereco) {
+	public Sinistro(String data, String endereco) {
 		this.data = data;
 		this.endereco = endereco;
 		this.id = geraId();
