@@ -3,7 +3,6 @@ package mc322_1s2023;
 public class Main {
 	
 	public static void main(String[] args) {
-		
 		//Instanciando e usando a classe Veculo
 		Veiculo veiculo1 = new Veiculo("DDD2311", "Chevrolet", "Camaro");
 
@@ -38,5 +37,6 @@ public class Main {
 		}
 
 		user1.toString();
+
 	}
 }
