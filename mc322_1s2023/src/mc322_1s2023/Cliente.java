@@ -16,7 +16,8 @@ public class Cliente {
 	}
 
 	public String toString() {
-		return this.nome;
+		String all = "Nome: " + this.nome + "\nIdade: " + this.idade + "\nCPF: " + this.cpf + "\nData de Nascimento: " + this.dataNascimento + "\nEndereço: " + this.endereco;
+		return all;
 	}
 
 	public boolean charsIguais(String s) {
