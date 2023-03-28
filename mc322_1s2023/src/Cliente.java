@@ -7,6 +7,7 @@ public class Cliente {
 	private String dataNascimento;
 	private String endereco;
 	
+	//Constructor do cliente
 	public Cliente(int idade, String nome, String cpf, String dataNascimento, String endereco) {
 		this.idade = idade;
 		this.nome = nome;
@@ -15,11 +16,16 @@ public class Cliente {
 		this.endereco = endereco;
 	}
 
+	//Método padrão toString
 	public String toString() {
 		String all = "Nome: " + this.nome + "\nIdade: " + this.idade + "\nCPF: " + this.cpf + "\nData de Nascimento: " + this.dataNascimento + "\nEndereço: " + this.endereco;
 		return all;
 	}
 
+	/*
+	Método que recebe uma string e verifica se todos 
+	os seus chars são iguais, devolvendo um booleano
+	 */
 	public boolean charsIguais(String s) {
 		for (int i = 0; i < s.length(); i++) {
 			if (s.charAt(0) != s.charAt(i)) {
@@ -29,6 +35,11 @@ public class Cliente {
 		return true;
 	}
 
+	/*
+	Método que aplica o algoritmo padrão de validação
+	dos dígitos verificadores do CPF, de modo a garantir
+	que se trata de um CPF verdadeiro
+	 */
 	public boolean digitosCpfValidos(String s) {
 		int soma = 0;
 		int fatorInicial = 10;
@@ -68,6 +79,10 @@ public class Cliente {
 		return true;
 	}
 
+	/*
+	Método que verifica se todos os dítigos de um 
+	CPF recebido como parâmetro são númericos
+	 */
 	public boolean charsNumericos(String cpf) {
 		for (int i = 0; i < cpf.length(); i++) {
 			if (!Character.isDigit(cpf.charAt(i))) {
@@ -77,6 +92,12 @@ public class Cliente {
 		return true;
 	}
 
+	/*
+	Método principal no processo de validar o CPF, pois 
+	chama todos os outros métodos relacionados, e verifica
+	outras características necessárias, como o tamanho
+	do CPF
+	 */
 	public boolean validarCPF(String cpf) {
 		String cpf1 = cpf.replaceAll("\\.","");
 		String cpfAlterado = cpf1.replaceAll("\\-", "");

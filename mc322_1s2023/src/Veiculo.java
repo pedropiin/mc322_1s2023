@@ -5,6 +5,7 @@ public class Veiculo {
 	private String marca;
 	private String modelo;
 	
+	//Constructor da classe Veiculo
 	public Veiculo(String placa, String marca, String modelo) {
 		this.placa = placa;
 		this.marca = marca;

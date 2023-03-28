@@ -6,6 +6,7 @@ public class Seguradora {
 	private String email;
 	private String endereco;
 	
+	//Constructor da classe Seguradora
 	public Seguradora(String nome, String telefone, String email, String endereco) {
 		this.nome = nome;
 		this.telefone = telefone;
