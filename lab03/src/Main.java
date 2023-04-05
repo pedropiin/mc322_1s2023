@@ -1,5 +1,28 @@
 package mc322_1s2023;
 
+/*
+DÚVIDAS:
+	- Como getters e setters funcionam no caso de objetos e classes?
+		- apenas retornar e passar como parametro ou é mais complicado?
+	CLIENTE:
+		- como deve funcionar o setter da listaVeiculos (adicionar veiculo?)
+
+
+TODO:
+	CLIENTEPJ:
+		- setter da lista de veículos
+		- método para validar cnpj
+	CLIENTE:
+		- setter da lista de veículos
+	CLIENTEPF:
+		- setter da lista de veículos
+	SEGURADORA:
+		-setter da lista de clientes
+		-setter da lista de sinistros
+		- todoos métodos não padrões
+		
+*/
+
 public class Main {
 	
 	public static void main(String[] args) {

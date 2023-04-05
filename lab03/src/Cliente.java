@@ -1,26 +1,96 @@
 package mc322_1s2023;
 
+import java.util.Date;
+
 public class Cliente {
-	private int idade;
 	private String nome;
-	private String cpf;
-	private String dataNascimento;
 	private String endereco;
+	private Date dataLicenca;
+	private String educacao;
+	private String genero;
+	private String classeEconomica;
+	private ArrayList<Veiculo> listaVeiculos;
 	
 	//Constructor do cliente
-	public Cliente(int idade, String nome, String cpf, String dataNascimento, String endereco) {
-		this.idade = idade;
+	public Cliente(String nome, String endereco, Date dataLicenca,
+					String educacao, String genero, String classeEconomica,
+					ArrayList<Veiculo> listaVeiculos) {
 		this.nome = nome;
-		this.cpf = cpf;
-		this.dataNascimento = dataNascimento;
 		this.endereco = endereco;
+		this.educacao = educacao;
+		this.genero = genero;
+		this.classeEconomica = classeEconomica;
+		this.dataLicenca = dataLicenca;
+		this.listaVeiculos = listaVeiculos;
 	}
 
 	//Método padrão toString
 	public String toString() {
-		String all = "Nome: " + this.nome + "\nIdade: " + this.idade + "\nCPF: " + this.cpf + "\nData de Nascimento: " + this.dataNascimento + "\nEndereço: " + this.endereco;
+		String all ="Nome: " + getNome() + 
+					"\nEndereço: " + getEndereco() +
+					"\nEducação: " + getEducacao() + 
+					"\nGenero: " + getGenero() +
+					"\nClasse Econômica: " + getClasseEconomica() + 
+					"\nData da Licença: " + getDataLicenca();
+		
 		return all;
 	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String novoNome) {
+		this.nome = novoNome;
+	}
+
+	public String getEndereco() {
+		return this.endereco;
+	}
+
+	public void setEndereco(String novoEndereco) {
+		this.endereco = novoEndereco;
+	}
+
+	public String getEducacao() {
+		return this.educacao;
+	}
+
+	public void setEducacao(String novaEducacao) {
+		this.educacao = novaEducacao;
+	}
+
+	public String getGenero() {
+		return this.genero;
+	}
+
+	public void setGenero(String novoGenero) {
+		this.genero = novoGenero;
+	}
+
+	public String getClasseEconomica() {
+		return this.classeEconomica;
+	}
+
+	public void setClasseEconomica(String novaClasseEconomica) {
+		this.classeEconomica = novaClasseEconomica;
+	}
+
+	public ArrayList<Veiculo> getListaVeiculos() {
+		return this.listaVeiculos;
+	}
+
+	// TODO: SETTER DA LISTA VEICULOS
+
+	public Date getDataLicenca() {
+		return this.dataLicenca;
+	}
+
+	public void setDataLicenca(Date novaData) {
+		this.dataLicenca = novaData;
+	}
+
+	//INÍCIO DOS MÉTODOS NÃO PADRÕES;
 
 	/*
 	Método que recebe uma string e verifica se todos 
@@ -118,45 +188,5 @@ public class Cliente {
 			return false;
 		}
 		return true;
-	}
-	
-	public int getIdade() {
-		return idade;
-	}
-	
-	public void setIdade(int idade) {
-		this.idade = idade;
-	}
-	
-	public String getNome() {
-		return nome;
-	}
-	
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-	
-	public String getCpf() {
-		return cpf;
-	}
-	
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
-	
-	public String getDataNascimento() {
-		return dataNascimento;
-	}
-	
-	public void setDataNascimento(String dataNascimento) {
-		this.dataNascimento = dataNascimento; 
-	}
-	
-	public String getEndereco() {
-		return endereco;
-	}
-	
-	public void setEndereco(String endereco) {
-		this.endereco = endereco;
 	}
 }

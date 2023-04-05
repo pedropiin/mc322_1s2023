@@ -21,6 +21,17 @@ public class Sinistro {
 		this.veiculo = veiculo;
 		this.cliente = cliente;
 	}
+
+	public String toString() {
+		String all = "Data: " + getData() + 
+					"\nEndereço: " + getEndereco() +
+					"\nId: " + getId() + 
+					"\nSeguradora: " + getSeguradora() + 
+					"\nVeiculo: " + getVeiculo() + 
+					"\nCliente: " + getCliente();
+
+		return all;
+	}
 	
 	/*
 	Método que gera um id aleatório para cada objeto
@@ -40,22 +51,39 @@ public class Sinistro {
 		return data;
 	}
 	
-	public void setData(String data) {
-		this.data = data;
+	public void setData(String novaData) {
+		this.data = novaData;
 	}
 	
 	public String getEndereco() {
 		return endereco;
 	}
 	
-	public void setEndereco(String endereco) {
-		this.endereco = endereco;
+	public void setEndereco(String novoEndereco) {
+		this.endereco = novoEndereco;
 	}
 
-	public String toString() {
-		String all = "Data: " + this.data + "\nEndereço: " +
-		this.endereco + "\nId: " + this.id + "\nSeguradora: " +
-		this.seguradora + "\nVeiculo: " + this.veiculo +
-		"\nCliente: " + this.cliente;
+	public Seguradora getSeguradora() {
+		return this.seguradora;
+	}
+
+	public void setSeguradora(Seguradora novaSeguradora) {
+		this.seguradora = novaSeguradora;
+	}
+
+	public Veiculo getVeiculo() {
+		return this.veiculo;
+	}
+
+	public void setVeiculo(Veiculo novoVeiculo) {
+		this.veiculo = novoVeiculo;
+	}
+
+	public Cliente getCliente() {
+		return this.cliente;
+	}
+
+	public void setCliente(Cliente novoClente) {
+		this.cliente = novoClente;
 	}
 }
