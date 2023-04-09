@@ -11,7 +11,6 @@ DÚVIDAS:
 TODO:
 	CLIENTEPJ:
 		- setter da lista de veículos
-		- método para validar cnpj
 	CLIENTE:
 		- setter da lista de veículos
 	CLIENTEPF:

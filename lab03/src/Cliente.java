@@ -106,50 +106,6 @@ public class Cliente {
 	}
 
 	/*
-	Método que aplica o algoritmo padrão de validação
-	dos dígitos verificadores do CPF, de modo a garantir
-	que se trata de um CPF verdadeiro
-	 */
-	public boolean digitosCpfValidos(String s) {
-		int soma = 0;
-		int fatorInicial = 10;
-		int resto = 0;
-		for (int i = 0; i < s.length() - 2; i++) {
-			soma += (Character.getNumericValue(s.charAt(i)) * (fatorInicial - i));
-		}
-
-		resto = soma % 11;
-		if (resto < 2) {
-			if (Character.getNumericValue(s.charAt(9)) != 0) {
-				return false;
-			}
-		} else {
-			if (Character.getNumericValue(s.charAt(9)) != (11 - resto)) {
-				return false;
-			}
-		}
-
-		soma = 0;
-		fatorInicial = 11;
-		for (int i = 0; i < s.length() - 1; i++) {
-			soma += Character.getNumericValue(s.charAt(i)) * (fatorInicial - i);
-		}
-
-		resto = soma % 11;
-		if (resto < 2) {
-			if (Character.getNumericValue(s.charAt(10)) != 0) {
-				return false;
-			}
-		} else {
-			if (Character.getNumericValue(s.charAt(10)) != (11 - resto)) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	/*
 	Método que verifica se todos os dítigos de um 
 	CPF recebido como parâmetro são númericos
 	 */
@@ -158,34 +114,6 @@ public class Cliente {
 			if (!Character.isDigit(cpf.charAt(i))) {
 				return false;
 			}
-		}
-		return true;
-	}
-
-	/*
-	Método principal no processo de validar o CPF, pois 
-	chama todos os outros métodos relacionados, e verifica
-	outras características necessárias, como o tamanho
-	do CPF
-	 */
-	public boolean validarCPF(String cpf) {
-		String cpf1 = cpf.replaceAll("\\.","");
-		String cpfAlterado = cpf1.replaceAll("\\-", "");
-
-		if (!charsNumericos(cpfAlterado)) {
-			return false;
-		}
-
-		if (cpfAlterado.length() != 11) {
-			return false;
-		}
-
-		if (charsIguais(cpfAlterado)) {
-			return false;
-		}
-
-		if (!digitosCpfValidos(cpfAlterado)) {
-			return false;
 		}
 		return true;
 	}

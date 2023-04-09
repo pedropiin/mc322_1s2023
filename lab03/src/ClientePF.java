@@ -50,18 +50,24 @@ public class ClientePF extends Cliente {
     //INÍCIO DOS MÉTODOS NÃO PADRÕES
 
     /*
-     * Método que recebe uma string e verifica se todos
-     * os seus chars são iguais, devolvendo um booleano
+     * Método que apenas retorna o resultado
+     * do método de mesmo nome (charsIguais) da 
+     * classe pai (Cliente.java)
      */
     public boolean charsIguais(String s) {
-        for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(0) != s.charAt(i)) {
-                return false;
-            }
-        }
-        return true;
+        return super.charsIguais(s);
     }
 
+    /*
+     * Método que apenas retorna o resultado
+     * do método de mesmo nome (charsNumericos) da 
+     * classe pai (Cliente.java)
+     */
+    public boolean charsNumericos(String s) {
+        return super.charsNumericos(s);
+    }
+
+    
     /*
      * Método que aplica o algoritmo padrão de validação
      * dos dígitos verificadores do CPF, de modo a garantir
@@ -106,18 +112,6 @@ public class ClientePF extends Cliente {
         return true;
     }
 
-    /*
-     * Método que verifica se todos os dítigos de um
-     * CPF recebido como parâmetro são númericos
-     */
-    public boolean charsNumericos(String cpf) {
-        for (int i = 0; i < cpf.length(); i++) {
-            if (!Character.isDigit(cpf.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     /*
      * Método principal no processo de validar o CPF, pois
