@@ -6,6 +6,9 @@ DÚVIDAS:
 		- apenas retornar e passar como parametro ou é mais complicado?
 	CLIENTE:
 		- como deve funcionar o setter da listaVeiculos (adicionar veiculo?)
+	SEGURADORA:
+		- porque cadastrarCliente retorna boolean
+		- porque removerCliente retorna boolean
 
 
 TODO:

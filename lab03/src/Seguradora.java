@@ -65,7 +65,8 @@ public class Seguradora {
 	//INÍCIO DOS MÉTODOS NÃO PADRÕES
 
 	public boolean cadastrarCliente(Cliente cliente) {
-
+		listaClientes.add(cliente);
+		System.out.println("Cliente " + cliente.nome + "cadastrado.");
 	}
 
 	public boolean removerCliente(String cliente) {
@@ -73,7 +74,10 @@ public class Seguradora {
 	}
 
 	public ArrayList<Cliente> listarClientes(String tipoCliente) {
-
+		for (int i = 0; i < this.listaClientes.size(); i++) {
+			System.out.println(listaClientes(i));
+			System.out.println('\n');
+		}
 	}
 
 	public boolean gerarSinistro() {
@@ -85,6 +89,9 @@ public class Seguradora {
 	}
 
 	public ArrayList<Sinistro> listarSinistros() {
-
+		for (int i = 0; i < this.listaSinistros.size(); i++) {
+			System.out.println(listaSinistros(i));
+			System.out.println('\n');
+		}
 	}
 }
