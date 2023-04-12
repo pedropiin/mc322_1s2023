@@ -1,9 +1,6 @@
-package mc322_1s2023;
-
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
-
-import mc322_1s2023.ClientePF;
+import java.util.Random;
 
 public class Seguradora {
 	private String nome;
@@ -73,7 +70,7 @@ public class Seguradora {
 			}
 		}
 		listaClientes.add(cliente);
-		System.out.println("Cliente " + cliente.getNome() + "cadastrado.");
+		System.out.println("Cliente " + cliente.getNome() + " cadastrado.");
 
 		return true;
 	}
@@ -81,7 +78,8 @@ public class Seguradora {
 	public boolean removerCliente(String cliente) {
 		for (Cliente element : listaClientes) {
 			if (element.getNome() == cliente) {
-				System.out.println("A remoção do cliente " + cliente + "foi bem sucedida.");
+				listaClientes.remove(element);
+				System.out.println("A remoção do cliente " + cliente + " foi bem sucedida.");
 				return true;
 			}
 		}
@@ -93,14 +91,14 @@ public class Seguradora {
 		ArrayList<Cliente> listaClientesTipo = new ArrayList<Cliente>();
 		for (Cliente clienteCadastrado : listaClientes) {
 			if (clienteCadastrado instanceof ClientePF) {
-				if (tipoCliente == "PF") {
+				if (tipoCliente == "PF" || tipoCliente == "pf") {
 					System.out.println(clienteCadastrado);
 					listaClientesTipo.add(clienteCadastrado);
 				} else {
 					continue;
 				}
 			} else if (clienteCadastrado instanceof ClientePJ) {
-				if (tipoCliente == "PJ") {
+				if (tipoCliente == "PJ" || tipoCliente == "pj") {
 					System.out.println(clienteCadastrado);
 					listaClientesTipo.add(clienteCadastrado);
 				} else {
@@ -112,8 +110,17 @@ public class Seguradora {
 	}
 
 	public boolean gerarSinistro(Veiculo veiculo, Cliente cliente) {
-		Date dataSinistro = new Date();
-		Sinistro novoSinistro = new Sinistro(dataSinistro, this.endereco, this, veiculo, cliente);
+		Random rand = new Random();
+		int ano = 2023;
+		int mes = rand.nextInt(12 - 1) + 1;
+		int dia = rand.nextInt(28 - 1) + 1;
+
+		LocalDate dataSinistro = LocalDate.of(ano, mes, dia);
+		Sinistro novoSinistro = new Sinistro(dataSinistro,
+											"Rua do Acidente 666",
+											this,
+											veiculo,
+											cliente);
 		this.listaSinistros.add(novoSinistro);
 
 		return true;
@@ -121,7 +128,7 @@ public class Seguradora {
 
 	public boolean visualizarSinistro(String cliente) {
 		if (listaSinistros.size() == 0) {
-			System.out.println("Não há sinistros registrados.");
+			System.out.println("Não há sinistros registrados no nome desse cliente.");
 			return false;
 		} else {
 			int numSinistrosCliente = 0;

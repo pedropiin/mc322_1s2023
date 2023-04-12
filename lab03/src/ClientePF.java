@@ -1,20 +1,26 @@
-package mc322_1s2023;
-
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class ClientePF extends Cliente {
+    private String educacao;
+    private String genero;
+    private String classeEconomica;
     private String cpf;
-    private Date dataNascimento;
+    private LocalDate dataNascimento;
+    private LocalDate dataLicenca;
 
     public ClientePF(String nome, String endereco, 
-                    Date dataLicenca, String educacao,
+                    LocalDate dataLicenca, String educacao,
                     String genero, String classeEconomica,
                     ArrayList<Veiculo> listaVeiculos,
-                    String cpf, Date dataNascimento) {
+                    String cpf, LocalDate dataNascimento) {
 
-        super(nome, endereco, dataLicenca, educacao, genero, classeEconomica, listaVeiculos, cpf, dataNascimento);
+        super(nome, endereco, listaVeiculos);
+        this.educacao = educacao;
+        this.genero = genero;
+        this.classeEconomica = classeEconomica;
         this.cpf = cpf;
+        this.dataLicenca = dataLicenca;
         this.dataNascimento = dataNascimento;
     }
 
@@ -32,6 +38,38 @@ public class ClientePF extends Cliente {
         return all;
     }
 
+    public String getEducacao() {
+        return this.educacao;
+    }
+
+    public void setEducacao(String novaEducacao) {
+        this.educacao = novaEducacao;
+    }
+
+    public String getGenero() {
+        return this.genero;
+    }
+
+    public void setGenero(String novoGenero) {
+        this.genero = novoGenero;
+    }
+
+    public String getClasseEconomica() {
+        return this.classeEconomica;
+    }
+
+    public void setClasseEconomica(String novaClasseEconomica) {
+        this.classeEconomica = novaClasseEconomica;
+    }
+
+    public LocalDate getDataLicenca() {
+        return this.dataLicenca;
+    }
+
+    public void setDataLicenca(LocalDate novaData) {
+        this.dataLicenca = novaData;
+    }
+
     public String getCPF() {
         return this.cpf;
     }
@@ -40,12 +78,12 @@ public class ClientePF extends Cliente {
         this.cpf = novoCPF;
     }
 
-    public Date getDataNascimento() {
+    public LocalDate getDataNascimento() {
         return this.dataNascimento;
     }
 
-    public void setDataNascimento(Date novaDataNascimento) {
-        this.dataFundacao = novaDataNascimento;
+    public void setDataNascimento(LocalDate novaDataNascimento) {
+        this.dataNascimento = novaDataNascimento;
     }
 
     //INÍCIO DOS MÉTODOS NÃO PADRÕES
@@ -124,21 +162,29 @@ public class ClientePF extends Cliente {
         String cpf1 = cpf.replaceAll("\\.", "");
         String cpfAlterado = cpf1.replaceAll("\\-", "");
 
+        boolean cpfValido = true;
+
         if (!charsNumericos(cpfAlterado)) {
-            return false;
+            cpfValido = false;
         }
 
         if (cpfAlterado.length() != 11) {
-            return false;
+            cpfValido = false;
         }
 
         if (charsIguais(cpfAlterado)) {
-            return false;
+            cpfValido = false;
         }
 
         if (!digitosCpfValidos(cpfAlterado)) {
-            return false;
+            cpfValido = false;
         }
-        return true;
+
+        if (cpfValido) {
+            System.out.println("O CPF é valido.");
+        } else {
+            System.out.println("O CPF é inválido");
+        }
+        return cpfValido;
     }
 }

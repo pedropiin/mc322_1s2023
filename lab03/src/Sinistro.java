@@ -1,17 +1,16 @@
-package mc322_1s2023;
-
+import java.time.LocalDate;
 import java.util.Random;
 
 public class Sinistro {
 	private int id;
-	private String data;
+	private LocalDate data;
 	private String endereco;
 	private Seguradora seguradora;
 	private Veiculo veiculo;
 	public Cliente cliente;
 	
 	//Constructor da classe Sinistro
-	public Sinistro(String data, String endereco,
+	public Sinistro(LocalDate data, String endereco,
 					Seguradora seguradora, Veiculo veiculo,
 					Cliente cliente) {
 		this.data = data;
@@ -26,9 +25,10 @@ public class Sinistro {
 		String all = "Data: " + getData() + 
 					"\nEndereço: " + getEndereco() +
 					"\nId: " + getId() + 
-					"\nSeguradora: " + getSeguradora() + 
-					"\nVeiculo: " + getVeiculo() + 
-					"\nCliente: " + getCliente();
+					"\nSeguradora: " + seguradora.getNome() + 
+					"\nPlaca do Veículo: " + veiculo.getPlaca() +
+					"\nModelo do Veículo: " + veiculo.getModelo() +
+					"\nNome do Cliente: " + cliente.getNome();
 
 		return all;
 	}
@@ -47,11 +47,11 @@ public class Sinistro {
 		return id;
 	}
 	
-	public String getData() {
+	public LocalDate getData() {
 		return data;
 	}
 	
-	public void setData(String novaData) {
+	public void setData(LocalDate novaData) {
 		this.data = novaData;
 	}
 	

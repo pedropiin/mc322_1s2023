@@ -1,39 +1,23 @@
-package mc322_1s2023;
-
-import java.util.Date;
 import java.util.ArrayList;
 
 public class Cliente {
 	private String nome;
 	private String endereco;
-	private Date dataLicenca;
-	private String educacao;
-	private String genero;
-	private String classeEconomica;
 	private ArrayList<Veiculo> listaVeiculos;
 	
 	//Constructor do cliente
-	public Cliente(String nome, String endereco, Date dataLicenca,
-					String educacao, String genero, String classeEconomica,
+	public Cliente(String nome, String endereco,
 					ArrayList<Veiculo> listaVeiculos) {
 		this.nome = nome;
 		this.endereco = endereco;
-		this.educacao = educacao;
-		this.genero = genero;
-		this.classeEconomica = classeEconomica;
-		this.dataLicenca = dataLicenca;
 		this.listaVeiculos = listaVeiculos;
 	}
 
 	//Método padrão toString
 	public String toString() {
 		String all ="Nome: " + getNome() + 
-					"\nEndereço: " + getEndereco() +
-					"\nEducação: " + getEducacao() + 
-					"\nGenero: " + getGenero() +
-					"\nClasse Econômica: " + getClasseEconomica() + 
-					"\nData da Licença: " + getDataLicenca();
-		
+					"\nEndereço: " + getEndereco();
+
 		return all;
 	}
 
@@ -53,43 +37,22 @@ public class Cliente {
 		this.endereco = novoEndereco;
 	}
 
-	public String getEducacao() {
-		return this.educacao;
-	}
-
-	public void setEducacao(String novaEducacao) {
-		this.educacao = novaEducacao;
-	}
-
-	public String getGenero() {
-		return this.genero;
-	}
-
-	public void setGenero(String novoGenero) {
-		this.genero = novoGenero;
-	}
-
-	public String getClasseEconomica() {
-		return this.classeEconomica;
-	}
-
-	public void setClasseEconomica(String novaClasseEconomica) {
-		this.classeEconomica = novaClasseEconomica;
-	}
-
 	public ArrayList<Veiculo> getListaVeiculos() {
 		return this.listaVeiculos;
 	}
 
-	public Date getDataLicenca() {
-		return this.dataLicenca;
-	}
-
-	public void setDataLicenca(Date novaData) {
-		this.dataLicenca = novaData;
-	}
-
 	//INÍCIO DOS MÉTODOS NÃO PADRÕES;
+
+	/*
+	 * Nota-se que não há um método set para a lista
+	 * de veículos, já que não faz sentido. Para mais, essa 
+	 * variável é private, tornando-a inacessável para 
+	 * alterações. Então, necessita-se de um método para 
+	 * adicionar novos veículos.
+	 */
+	public void addVeiculo(Veiculo novoVeiculo) {
+		this.listaVeiculos.add(novoVeiculo);
+	}
 
 	/*
 	Método que recebe uma string e verifica se todos 

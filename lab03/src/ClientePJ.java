@@ -1,17 +1,14 @@
-package mc322_1s2023;
-
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class ClientePJ extends Cliente {
     private String cnpj;
-    private Date dataFundacao;
+    private LocalDate dataFundacao;
 
-    public ClientePJ(String nome, String endereco, Date dataLicenca,
-                    String educacao, String genero, String classeEconomica, 
+    public ClientePJ(String nome, String endereco, 
                     ArrayList<Veiculo> listaVeiculos, String cnpj,
-                    Date dataFundacao) {
-        super(nome, endereco, dataLicenca, educacao, genero, classeEconomica, listaVeiculos);
+                    LocalDate dataFundacao) {
+        super(nome, endereco, listaVeiculos);
         this.cnpj = cnpj;
         this.dataFundacao = dataFundacao;
     }
@@ -20,10 +17,6 @@ public class ClientePJ extends Cliente {
     public String toString() {
         String all = "Nome: " + getNome() +
                 "\nEndereço: " + getEndereco() +
-                "\nData da Licença: " + getDataLicenca() +
-                "\nEducação: " + getEducacao() +
-                "\nGenero: " + getGenero() +
-                "\nClasse Econômica: " + getClasseEconomica() +
                 "\nCNPJ: " + getCNPJ() +
                 "\nData da Fundação: " + getDataFundacao();
 
@@ -38,11 +31,11 @@ public class ClientePJ extends Cliente {
         this.cnpj = novoCNPJ;
     }
 
-    public Date getDataFundacao() {
+    public LocalDate getDataFundacao() {
         return this.dataFundacao;
     }
 
-    public void setDataFundacao(Date novaDataFundacao) {
+    public void setDataFundacao(LocalDate novaDataFundacao) {
         this.dataFundacao = novaDataFundacao;
     }
 
@@ -82,7 +75,7 @@ public class ClientePJ extends Cliente {
             soma += Character.getNumericValue(s.charAt(i)) * (fatorInicial - i);
         }
 
-        resto = soma % 11
+        resto = soma % 11;
         if (resto < 2) {
             if (Character.getNumericValue(s.charAt(12)) != 0) {
                 return false;
@@ -128,22 +121,29 @@ public class ClientePJ extends Cliente {
         String cnpj2 = cnpj1.replaceAll("\\-", "");
         String cnpjAlterado = cnpj2.replaceAll("\\/", "");
 
+        boolean cnpjValido = true;
+
         if (!charsNumericos(cnpjAlterado)) {
-            return false;
+            cnpjValido = false;
         }
 
         if (cnpjAlterado.length() != 14) {
-            return false;
+            cnpjValido = false;
         }
 
         if (charsIguais(cnpjAlterado)) {
-            return false;
+            cnpjValido = false;
         }
 
         if (!digitosCnpjValidos(cnpjAlterado)) {
-            return false;
+            cnpjValido = false;
         }
 
-        return true;
+        if (cnpjValido) {
+            System.out.println("O CNPJ é válido.");
+        } else {
+            System.out.println("O CNPJ é inválido.");
+        }
+        return cnpjValido;
     }
 }
