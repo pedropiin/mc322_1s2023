@@ -1,5 +1,10 @@
 package mc322_1s2023;
 
+import java.util.ArrayList;
+import java.util.Date;
+
+import mc322_1s2023.ClientePF;
+
 public class Seguradora {
 	private String nome;
 	private String telefone;
@@ -54,44 +59,92 @@ public class Seguradora {
 		return this.listaSinistros;
 	}
 
-	//TODO: SETTER DA LISTA SINISTROS
-
 	public ArrayList<Cliente> getListaClientes() {
 		return this.listaClientes;
 	}
 
-	//TODO: SETTER DA LISTA CLIENTES
-
 	//INÍCIO DOS MÉTODOS NÃO PADRÕES
 
 	public boolean cadastrarCliente(Cliente cliente) {
+		for (Cliente element : listaClientes) {
+			if (element.getNome() == cliente.getNome()) {
+				System.out.println("O cliente " + cliente.getNome() + "já esta cadastrádo. ");
+				return false;
+			}
+		}
 		listaClientes.add(cliente);
-		System.out.println("Cliente " + cliente.nome + "cadastrado.");
+		System.out.println("Cliente " + cliente.getNome() + "cadastrado.");
+
+		return true;
 	}
 
 	public boolean removerCliente(String cliente) {
-
+		for (Cliente element : listaClientes) {
+			if (element.getNome() == cliente) {
+				System.out.println("A remoção do cliente " + cliente + "foi bem sucedida.");
+				return true;
+			}
+		}
+		System.out.println("O cliente " + cliente + "não existe.");
+		return false;
 	}
 
 	public ArrayList<Cliente> listarClientes(String tipoCliente) {
-		for (int i = 0; i < this.listaClientes.size(); i++) {
-			System.out.println(listaClientes(i));
-			System.out.println('\n');
+		ArrayList<Cliente> listaClientesTipo = new ArrayList<Cliente>();
+		for (Cliente clienteCadastrado : listaClientes) {
+			if (clienteCadastrado instanceof ClientePF) {
+				if (tipoCliente == "PF") {
+					System.out.println(clienteCadastrado);
+					listaClientesTipo.add(clienteCadastrado);
+				} else {
+					continue;
+				}
+			} else if (clienteCadastrado instanceof ClientePJ) {
+				if (tipoCliente == "PJ") {
+					System.out.println(clienteCadastrado);
+					listaClientesTipo.add(clienteCadastrado);
+				} else {
+					continue;
+				}
+			}
 		}
+		return listaClientesTipo;
 	}
 
-	public boolean gerarSinistro() {
+	public boolean gerarSinistro(Veiculo veiculo, Cliente cliente) {
+		Date dataSinistro = new Date();
+		Sinistro novoSinistro = new Sinistro(dataSinistro, this.endereco, this, veiculo, cliente);
+		this.listaSinistros.add(novoSinistro);
 
+		return true;
 	}
 
 	public boolean visualizarSinistro(String cliente) {
-
+		if (listaSinistros.size() == 0) {
+			System.out.println("Não há sinistros registrados.");
+			return false;
+		} else {
+			int numSinistrosCliente = 0;
+			for (Sinistro elementSin : listaSinistros) {
+				if (elementSin.cliente.getNome() == cliente) {
+					System.out.println(elementSin);
+					numSinistrosCliente++;
+				}
+			}
+			if (numSinistrosCliente > 0) {
+				return true;
+			} else {
+				System.out.println("O cliente não possui sinistros.");
+				return false;
+			}
+		}
 	}
 
 	public ArrayList<Sinistro> listarSinistros() {
 		for (int i = 0; i < this.listaSinistros.size(); i++) {
-			System.out.println(listaSinistros(i));
+			System.out.println(listaSinistros.get(i));
 			System.out.println('\n');
 		}
+		return this.listaSinistros;
 	}
 }

@@ -1,6 +1,7 @@
 package mc322_1s2023;
 
 import java.util.Date;
+import java.util.ArrayList;
 
 public class Cliente {
 	private String nome;
@@ -79,8 +80,6 @@ public class Cliente {
 	public ArrayList<Veiculo> getListaVeiculos() {
 		return this.listaVeiculos;
 	}
-
-	// TODO: SETTER DA LISTA VEICULOS
 
 	public Date getDataLicenca() {
 		return this.dataLicenca;

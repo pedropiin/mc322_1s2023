@@ -1,6 +1,7 @@
 package mc322_1s2023;
 
 import java.util.Date;
+import java.util.ArrayList;
 
 public class ClientePJ extends Cliente {
     private String cnpj;

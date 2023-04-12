@@ -8,7 +8,7 @@ public class Sinistro {
 	private String endereco;
 	private Seguradora seguradora;
 	private Veiculo veiculo;
-	private Cliente cliente;
+	public Cliente cliente;
 	
 	//Constructor da classe Sinistro
 	public Sinistro(String data, String endereco,
