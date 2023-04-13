@@ -20,6 +20,15 @@ public class Seguradora {
 		this.listaClientes = listaClientes;
 	}
 
+	public String toString() {
+		String all = "Nome: " + this.getNome() +
+					"\nTelefone: " + this.getTelefone() +
+					"\nEmail: " + this.getEmail() + 
+					"\nEndereço: " + this.getEndereco();
+
+		return all;
+	}
+
 	public String getNome() {
 		return nome;
 	}
@@ -62,6 +71,12 @@ public class Seguradora {
 
 	//INÍCIO DOS MÉTODOS NÃO PADRÕES
 
+	/*
+	 * Método que recebe um objeto cliente e o adiciona
+	 * na listaClientes. Antes, passa por toda a lista 
+	 * se certificando de que tal cliente já não esta 
+	 * cadastrado.
+	 */
 	public boolean cadastrarCliente(Cliente cliente) {
 		for (Cliente element : listaClientes) {
 			if (element.getNome() == cliente.getNome()) {
@@ -75,6 +90,11 @@ public class Seguradora {
 		return true;
 	}
 
+	/*
+	 * Mètodo que recebe o nome de um cliente e passa 
+	 * por toda a listaClientes, procurando um cliente
+	 * com tal nome para remove-lo
+	 */
 	public boolean removerCliente(String cliente) {
 		for (Cliente element : listaClientes) {
 			if (element.getNome() == cliente) {
@@ -87,6 +107,12 @@ public class Seguradora {
 		return false;
 	}
 
+	/*
+	 * Método que recebe uma string da forma "pf" ou "pj",
+	 * representando um tipo de cliente. Assim, com base
+	 * em tal String, passar por toda a listaCLientes, 
+	 * printando apenas aqueles que são de tal tipo
+	 */
 	public ArrayList<Cliente> listarClientes(String tipoCliente) {
 		ArrayList<Cliente> listaClientesTipo = new ArrayList<Cliente>();
 		for (Cliente clienteCadastrado : listaClientes) {
@@ -109,6 +135,11 @@ public class Seguradora {
 		return listaClientesTipo;
 	}
 
+	/*
+	 * Método que recebe um objeto veículo e um objeto
+	 * cliente como parâmetros, e cria um novo sinistro
+	 * com data aleatória e o adiciona na listaSinistros
+	 */
 	public boolean gerarSinistro(Veiculo veiculo, Cliente cliente) {
 		Random rand = new Random();
 		int ano = 2023;
@@ -126,6 +157,11 @@ public class Seguradora {
 		return true;
 	}
 
+	/*
+	 * Método que recebe uma string contendo o nome de um cliente
+	 * e passa pela listaSinistros. Assim, printa todo sinistro 
+	 * que encontrar associado ao nome do cliente em questão.
+	 */
 	public boolean visualizarSinistro(String cliente) {
 		if (listaSinistros.size() == 0) {
 			System.out.println("Não há sinistros registrados no nome desse cliente.");
@@ -147,6 +183,10 @@ public class Seguradora {
 		}
 	}
 
+	/*
+	 * Método que printa todos os sinistros contidos na
+	 * listaSinistros
+	 */
 	public ArrayList<Sinistro> listarSinistros() {
 		for (int i = 0; i < this.listaSinistros.size(); i++) {
 			System.out.println(listaSinistros.get(i));

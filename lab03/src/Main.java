@@ -66,20 +66,70 @@ public class Main {
         ArrayList<Sinistro> listaSinistroTemp = seguradora.listarSinistros();
         System.out.println("---Fim da listagem de sinistros.---\n");
 
+        // CHAMADA DE TODOS OS MÉTODOS TOSTRING()
+
+        System.out.println(cliente1);
+        System.out.println("\n");
+        System.out.println(cliente2);
+        System.out.println("\n");
+        System.out.println(seguradora);
+        System.out.println("\n");
+        System.out.println(seguradora.listarSinistros());
+        System.out.println("\n");
+        System.out.println(veiculoCliente1);
+        System.out.println("\n");
+        System.out.println("---Fim da chamada dos métodos toString---\n");
+
         // REMOÇÃO DOS CLIENTES
 
         boolean temp4 = seguradora.removerCliente("Pedro da Rosa");
         System.out.println("\n---Fim da remoção de clientes.\n");
 
+
         // MÉTODO INTERATIVO COM SYSTEM.IN
 
         Scanner scan = new Scanner(System.in);
+        Scanner scan2 = new Scanner(System.in);
         int entrada = 1;
         System.out.println("Bem-vindo ao sistema interativo da " + seguradora.getNome() + ".");
 
         while (entrada != 0) {
-            
-        }
+            System.out.println("Opções: ");
+            System.out.println("[1] - Informações da seguradora");
+            System.out.println("[2] - Listar clientes");
+            System.out.println("[3] - Listar sinistros");
+            System.out.println("[0] - Encerrar sessão\n");
+            entrada = scan.nextInt();
 
+            switch (entrada) {
+                case 1:
+                    seguradora.toString();
+                    break;
+
+                case 2:
+                    System.out.println("Gostaria de listar os clientes físicos (1), jurídicos (2) ou ambos (3)?");
+                    int tipoCliente = scan.nextInt();
+                    switch (tipoCliente) {
+                        case 1:
+                            seguradora.listarClientes("pf");
+                            break;
+                        case 2:
+                            seguradora.listarClientes("pj");
+                            break;
+                        case 3:
+                            seguradora.listarClientes("pf");
+                            seguradora.listarClientes("pj");
+                            break;
+                    }
+                    break;
+
+                case 3:
+                    seguradora.listarSinistros();
+                    break;
+                case 0:
+                    System.out.println("Encerrando sessão.");
+                    continue;
+            }
+        }
     } 
 }
