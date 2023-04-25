@@ -98,6 +98,11 @@ public class Seguradora {
 	public boolean removerCliente(String cliente) {
 		for (Cliente element : listaClientes) {
 			if (element.getNome() == cliente) {
+				for (int i = 0; i < listaSinistros.size(); i++) {
+					if (listaSinistros.get(i).cliente.getNome() == cliente) {
+						listaSinistros.remove(listaSinistros.get(i));
+					}
+				}
 				listaClientes.remove(element);
 				System.out.println("A remoção do cliente " + cliente + " foi bem sucedida.");
 				return true;
