@@ -52,6 +52,11 @@ public class ClientePJ extends Cliente {
 
     //INÍCIO DOS MÉTODOS NÃO PADRÕES
 
+    /*
+     * Método que cálcula o valor de cobrado de um cliente
+     * por parte da seguradora, levando em conta taxas
+     * associadas à quantidade de funcionários da empresa.
+     */
     public double calculaScore() {
         int quantidadeCarros = this.getListaVeiculos().size();
         double score = CalcSeguro.VALOR_BASE.getValor() *

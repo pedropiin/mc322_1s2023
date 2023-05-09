@@ -1,10 +1,10 @@
-public static class Validacao {
+public class Validacao {
     /*
      * Método que apenas retorna o resultado
      * do método de mesmo nome (charsIguais) da 
      * classe pai (Cliente.java)
      */
-    public boolean charsIguais(String s) {
+    public static boolean charsIguais(String s) {
         for (int i = 0; i < s.length(); i++) {
 			if (s.charAt(0) != s.charAt(i)) {
 				return false;
@@ -18,7 +18,7 @@ public static class Validacao {
      * do método de mesmo nome (charsNumericos) da 
      * classe pai (Cliente.java)
      */
-    public boolean charsNumericos(String s) {
+    public static boolean charsNumericos(String s) {
         for (int i = 0; i < s.length(); i++) {
 			if (!Character.isDigit(s.charAt(i))) {
 				return false;
@@ -33,7 +33,7 @@ public static class Validacao {
      * dos dígitos verificadores do CPF, de modo a garantir
      * que se trata de um CPF verdadeiro
      */
-    public boolean digitosCpfValidos(String s) {
+    public static boolean digitosCpfValidos(String s) {
         int soma = 0;
         int fatorInicial = 10;
         int resto = 0;
@@ -79,7 +79,7 @@ public static class Validacao {
      * outras características necessárias, como o tamanho
      * do CPF
      */
-    public boolean validarCPF(String cpf) {
+    public static boolean validarCPF(String cpf) {
         String cpf1 = cpf.replaceAll("\\.", "");
         String cpfAlterado = cpf1.replaceAll("\\-", "");
 
@@ -114,7 +114,7 @@ public static class Validacao {
      * dos dígitos verificadores do CNPJ, de modo a garantir
      * que se trata de um CNPJ verdadeiro
      */
-    public boolean digitosCnpjValidos(String s) {
+    public static boolean digitosCnpjValidos(String s) {
         int soma = 0;
         int fatorInicial = 5;
         int resto = 0;
@@ -165,7 +165,7 @@ public static class Validacao {
      * outras características necessárias, como o tamanho
      * do CNPJ
      */
-    public boolean validarCNPJ(String cnpj) {
+    public static boolean validarCNPJ(String cnpj) {
         String cnpj1 = cnpj.replaceAll("\\.", "");
         String cnpj2 = cnpj1.replaceAll("\\-", "");
         String cnpjAlterado = cnpj2.replaceAll("\\/", "");

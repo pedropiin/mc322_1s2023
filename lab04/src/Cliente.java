@@ -66,7 +66,13 @@ public class Cliente {
 		this.listaVeiculos.add(novoVeiculo);
 	}
 
+	/*
+	 * Método que não deve ser utilizado em objetos dessa 
+	 * classe, já que se torna de uma classe-pai. Assim, 
+	 * esse método é sobrecarregado em cada uma das classes
+	 * filho
+	 */
 	public double calculaScore() {
-		return -1.0;
+		return 0;
 	}
 }

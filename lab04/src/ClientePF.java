@@ -89,6 +89,11 @@ public class ClientePF extends Cliente {
 
     //INÍCIO DOS MÉTODOS NÃO PADRÕES
 
+    /*
+     * Método que cálcula o valor de cobrado de um cliente
+     * por parte da seguradora, levando em conta taxas
+     * associadas a sua idade.
+     */
     public double calculaScore() {
         int idadeCliente = Period.between(dataNascimento, LocalDate.now()).getYears();
         int quantidadeCarros = this.getListaVeiculos().size();

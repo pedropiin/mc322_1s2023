@@ -200,6 +200,11 @@ public class Seguradora {
 		return this.listaSinistros;
 	}
 
+	/*
+	 * Método que passa pela lista de sinistros procurando 
+	 * sinistros associados ao cliente passado como parâmetro.
+	 * Assim, retorna o número de tais acidentes
+	 */
 	public int numSinistrosCliente(String nomeCliente) {
 		int numSinistros = 0;
 		for (Sinistro elemSinistro : listaSinistros) {
@@ -211,23 +216,33 @@ public class Seguradora {
 		return numSinistros;
 	}
 
-	public double calcularPrecoSeguroCliente(String nomeCliente) {
-		double preco = -1.0;
-		int quantidadeSinistros = numSinistrosCliente(nomeCliente);
+	/*
+	 * Método que calcula o valor total do seguro de um 
+	 * cliente, levando em conta a quantidade de sinistros
+	 * que ele possui
+	 */
+	public double calcularPrecoSeguroCliente(Cliente cliente) {
+		double preco = 0;
+		int quantidadeSinistros = numSinistrosCliente(cliente.getNome());
 
-		for (Cliente cliente : listaClientes) {
-			if (cliente.getNome() == nomeCliente) {
-				preco = cliente.calculaScore() * (1 + quantidadeSinistros);
-			}
-		}
-
+		preco = cliente.calculaScore() * (1 + quantidadeSinistros);
 		if (preco < 0) {
 			System.out.println("Tal cliente não existe / não esta registrado.");
 		}
 		return preco;
 	}
 
+	/*
+	 * Método que soma o preço de todos os seguros de todos 
+	 * os clientes da seguradora, de modo a retornar a receita
+	 * total.
+	 */
 	public double calcularReceita() {
+		double receita = 0;
+		for (Cliente cliente : listaClientes) {
+			receita += calcularPrecoSeguroCliente(cliente);
+		}
 
+		return receita;
 	}
 }
