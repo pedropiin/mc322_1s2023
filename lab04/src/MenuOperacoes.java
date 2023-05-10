@@ -5,14 +5,42 @@ public enum MenuOperacoes {
     GERAR_SINISTRO(4),
     TRANSFERIR_SEGURO(5),
     CALCULAR_RECEITA(6),
-    SAIR(0);
+    SAIR(0),
 
-    public final int operacao;
-    MenuOperacoes(int operacao) {
+    CADASTRAR_CLIENTE_PF_PJ(1.1),
+    CADASTRAR_VEICULO(1.2),
+    CADASTRAR_SEGURADORA(1.3),
+    VOLTAR_CADASTRO(1.4),
+
+    LISTAR_CLIENTES_POR_SEGURADORA(2.1),
+    LISTAR_SINISTROS_POR_SEGURADORA(2.2),
+    LISTAR_SINISTROS_POR_CLIENTE(2.3),
+    LISTAR_VEICULOS_POR_CLIENTE(2.4),
+    LISTAR_VEICULOS_POR_SEGURADORA(2.5),
+    VOLTAR_LISTAR(2.6),
+
+    EXCLUIR_CLIENTE(3.1),
+    EXCLUIR_VEICULO(3.2),
+    EXCLUIR_SINISTRO(3.3),
+    VOLTAR_EXCLUIR(3.4),
+
+    ERRO(-1);
+
+    public final double operacao;
+    MenuOperacoes(double operacao) {
         this.operacao = operacao;
     }
 
-    public int getOperacao() {
-        return this.operacao;
+    public double getOperacao() {
+        return operacao;
+    }
+
+    public static MenuOperacoes getEnumComando(double entrada) {
+        for (MenuOperacoes comando : MenuOperacoes.values()) {
+            if (comando.getOperacao() == entrada) {
+                return comando;
+            }
+        }
+        return ERRO;
     }
 }

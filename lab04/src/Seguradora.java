@@ -200,6 +200,12 @@ public class Seguradora {
 		return this.listaSinistros;
 	}
 
+	public void listarVeiculos() {
+		for (int i = 0; i < listaClientes.size(); i++) {
+			
+		}
+	}
+
 	/*
 	 * Método que passa pela lista de sinistros procurando 
 	 * sinistros associados ao cliente passado como parâmetro.
