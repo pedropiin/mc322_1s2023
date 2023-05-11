@@ -12,7 +12,7 @@ public class AppMain {
             System.out.println("Nosso sistema ainda não possui nenhuma seguradora cadastrada.");
             return -1;
         } else {
-            System.out.println("Digite o número relacionado à seguradora na qual se deseja cadastrar o novo cliente.");
+            System.out.println("Digite o número relacionado à seguradora relacionada ao cliente em questão.");
             for (int i = 0; i < listaSeguradoras.size(); i++) {
                 System.out.println("(" + i + ") - " + listaSeguradoras.get(i).getNome());
             }
@@ -133,6 +133,38 @@ public class AppMain {
         Seguradora novaSeguradora = new Seguradora(nome, telefone, email, endereco, new ArrayList<Sinistro>(), new ArrayList<Cliente>());
         listaSeguradoras.add(novaSeguradora);
     }
+
+    public boolean removerVeiculo(String nomeDonoVeiculo, int indiceSeguradora) {
+        ArrayList<Cliente> listaClientesTemp = listaSeguradoras.get(indiceSeguradora).getListaClientes();
+        for (int i = 0; i < listaClientesTemp.size(); i++) {
+            if (listaClientesTemp.get(i).getNome() == nomeDonoVeiculo) {
+                ArrayList<Veiculo> listaVeiculosTemp = listaClientesTemp.get(i).getListaVeiculos();
+                System.out.println("Digite o índice associado ao veículo que se deseja excluir.");
+                for (int j = 0; j < listaVeiculosTemp.size(); j++) {
+                    System.out.println("(" + i + ") - " + listaVeiculosTemp.get(j).getMarca() + listaVeiculosTemp.get(j).getModelo() + listaVeiculosTemp.get(j).getPlaca());
+                }
+                int indiceVeiculo = scan.nextInt();
+                listaSeguradoras.get(indiceSeguradora).getListaClientes().get(i).getListaVeiculos().remove(indiceVeiculo);
+                return true;
+            }
+        }
+        System.out.println("Não há um cliente nesta segurado com o nome inserido. Favor tentar novamente.");
+        return false;
+    }
+
+    public void removerSinistro(String nomeClienteSinistro, int indiceSeguradora) {
+        ArrayList<Sinistro> listaSinistroTemp = listaSeguradoras.get(indiceSeguradora).getListaSinistros();
+        System.out.println("Digite o índice associado ao sinistro que se deseja excluir.");
+        for (int i = 0; i < listaSinistroTemp.size(); i++) {
+            if (listaSinistroTemp.get(i).getCliente().getNome() == nomeClienteSinistro) {
+                System.out.println("( " + i + ") - " + "ID: " + listaSinistroTemp.get(i).getId() + " / Placa do veículo: " + listaSinistroTemp.get(i).getVeiculo().getPlaca());
+            }
+        }
+        int indiceSinistro = scan.nextInt();
+        listaSeguradoras.get(indiceSeguradora).getListaSinistros().remove(indiceSinistro);
+    }
+
+
 
     public void menuInterativo() {
         int entradaPrimaria, entradaTemp, i = 0, j = 0, h = 0;
@@ -290,12 +322,21 @@ public class AppMain {
 
                     switch (comandoSecundario) {
                         case EXCLUIR_CLIENTE:
+                            i = escolheSeguradora();
+                            System.out.println("Digite o nome do cliente que se deseja excluir: ");
+                            boolean temp = listaSeguradoras.get(i).removerCliente(scan.nextLine());
                             break;
 
                         case EXCLUIR_VEICULO:
+                            i = escolheSeguradora();
+                            System.out.println("Digite o nome do cliente que terá o veículo removido: ");
+                            temp = removerVeiculo(scan.nextLine(), i);
                             break;
                             
                         case EXCLUIR_SINISTRO:
+                            i = escolheSeguradora();
+                            System.out.println("Digite o nome do cliente que terá o sinistro removido: ");
+                            removerSinistro(scan.nextLine(), i);
                             break;
 
                         case VOLTAR_EXCLUIR:
@@ -304,6 +345,10 @@ public class AppMain {
                     break;
                 
                 case GERAR_SINISTRO:
+                    i = escolheSeguradora();
+                    System.out.println("Digite a placa do veículo associado ao novo sinistro.");
+                    String placaNovoSin = scan.nextLine();
+                    listaSeguradoras.get(i).gerarSinistro(, listaSeguradoras.get(i).getListaClientes().get(escolheCliente(listaSeguradoras.get(i))))
                     break;
 
                 case TRANSFERIR_SEGURO:
