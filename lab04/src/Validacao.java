@@ -14,9 +14,8 @@ public class Validacao {
     }
 
     /*
-     * Método que apenas retorna o resultado
-     * do método de mesmo nome (charsNumericos) da 
-     * classe pai (Cliente.java)
+     * Método que verifica se a string contém apenas 
+     * caracteres númericos
      */
     public static boolean charsNumericos(String s) {
         for (int i = 0; i < s.length(); i++) {
@@ -27,6 +26,19 @@ public class Validacao {
 		return true;
     }
 
+    /*
+     * Método que verifica se a string contém apenas 
+     * letras e espaços
+     */
+    public static boolean apenasChars(String s) {
+        for (int i = 0; i < s.length(); i++) {
+            if (Character.isLetter(s.charAt(i)) || s.charAt(i) == ' ') {
+                continue;
+            }
+            return false;
+        }
+        return true;
+    }
     
     /*
      * Método que aplica o algoritmo padrão de validação

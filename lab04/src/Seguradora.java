@@ -253,6 +253,11 @@ public class Seguradora {
 		return receita;
 	}
 	
+	/*
+	 * Método que, assim como o escolheSeguradora da classe
+	 * AppMain, permite que o usuário, interativamente,
+	 * selecione o usuário que deseja interagir com
+	 */
 	public int escolheCliente() {
 		Scanner scan = new Scanner(System.in);
 		if (getListaClientes().size() == 0) {
@@ -268,6 +273,12 @@ public class Seguradora {
 		}
 	}
 
+	/*
+	 * Método que transfere o seguro de um cliente para outro
+	 * dentro de uma mesma seguradora. Para isso, transfere
+	 * todos os veículos do primeiro para o segundo, e, no fim,
+	 * recalcula o preço do seguro de ambos.
+	 */
 	public void transferirSeguro() {
 		System.out.println("Primeiramente necessitamos do cliente cujo seguro deverá partir de.");
 		int indiceClienteOriginal = escolheCliente();

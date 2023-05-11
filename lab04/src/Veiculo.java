@@ -5,7 +5,10 @@ public class Veiculo {
 	private int anoFabricacao;
 	
 	//Constructor da classe Veiculo
-	public Veiculo(String placa, String marca, String modelo, int anoFabricacao) {
+	public Veiculo(String placa, 
+					String marca,
+					String modelo, 
+					int anoFabricacao) {
 		this.placa = placa;
 		this.marca = marca;
 		this.modelo = modelo;
