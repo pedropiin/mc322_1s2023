@@ -4,10 +4,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class AppMain {
-    private ArrayList<Seguradora> listaSeguradoras = new ArrayList<Seguradora>();
-    Scanner scan = new Scanner(System.in);
+    public static ArrayList<Seguradora> listaSeguradoras = new ArrayList<Seguradora>();
+    static Scanner scan = new Scanner(System.in);
 
-    public int escolheSeguradora() {
+    public static int escolheSeguradora() {
         if (listaSeguradoras.size() == 0) {
             System.out.println("Nosso sistema ainda não possui nenhuma seguradora cadastrada.");
             return -1;
@@ -17,11 +17,12 @@ public class AppMain {
                 System.out.println("(" + i + ") - " + listaSeguradoras.get(i).getNome());
             }
             int entrada = scan.nextInt();
+            scan.nextLine();
             return entrada;
         }
     }
 
-    public int escolheCliente(Seguradora seguradoraCliente) {
+    public static int escolheCliente(Seguradora seguradoraCliente) {
         if (seguradoraCliente.getListaClientes().size() == 0) {
             System.out.println("A seguradora escolhida ainda não possui nenhum cliente cadastrado. Por favor tente novamente.");
             return -1;
@@ -31,11 +32,32 @@ public class AppMain {
                 System.out.println("(" + i + ") - " + seguradoraCliente.getListaClientes().get(i).getNome());
             }
             int entrada = scan.nextInt();
+            scan.nextLine();
             return entrada;
         }
     }
 
-    public void cadastrarClientePF(Seguradora seguradoraDesejada) {
+    public static int escolheVeiculo(Seguradora seguradoraCliente, int indiceCliente) {
+        ArrayList<Veiculo> listaVeiculosTemp = seguradoraCliente.getListaClientes().get(indiceCliente).getListaVeiculos();
+        int tamanhoListaVeiculos = listaVeiculosTemp.size();
+        if (tamanhoListaVeiculos == 0) {
+            System.out.println("O cliente escolhido ainda não possui nenhum veículo cadastrado.");
+            return -1;
+        } else {
+            System.out.println("Digite o índice do veículo em questão.");
+            for (int i = 0; i < tamanhoListaVeiculos; i++) {
+                System.out.println("(" + i + ") - " +
+                                    listaVeiculosTemp.get(i).getMarca() + 
+                                    listaVeiculosTemp.get(i).getModelo() + 
+                                    listaVeiculosTemp.get(i).getPlaca());
+            }
+            int indiceVeiculo = scan.nextInt();
+            scan.nextLine();
+            return indiceVeiculo;
+        }
+    }
+
+    public static void cadastrarClientePF(Seguradora seguradoraDesejada) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         System.out.println("Digite o nome do cliente: ");
@@ -73,7 +95,7 @@ public class AppMain {
         boolean temp = seguradoraDesejada.cadastrarCliente(novoCliente);
     }
 
-    public void cadastrarClientePJ(Seguradora seguradoraDesejada) {
+    public static void cadastrarClientePJ(Seguradora seguradoraDesejada) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         System.out.println("Digite o nome do cliente: ");
@@ -89,6 +111,7 @@ public class AppMain {
         LocalDate dataFundacao = LocalDate.parse(scan.nextLine(), dtf);
         System.out.println("Digite o número de funcionários do cliente: ");
         int quantidadeFuncionarios = scan.nextInt();
+        scan.nextLine();
 
         ClientePJ novoCliente = new ClientePJ(nome,
                                             endereco,
@@ -103,7 +126,7 @@ public class AppMain {
         boolean temp = seguradoraDesejada.cadastrarCliente(novoCliente);
     }
 
-    public void cadastrarVeiculo(Seguradora seguradoraDesejada, int indiceCliente) {
+    public static void cadastrarVeiculo(Seguradora seguradoraDesejada, int indiceCliente) {
         System.out.println("Digite a placa do veículo: ");
         String placa = scan.nextLine();
         System.out.println("Digite a marca do veículo: ");
@@ -112,6 +135,7 @@ public class AppMain {
         String modelo = scan.nextLine();
         System.out.println("Digite o ano de fabricação do veículo: ");
         int anoFabricacao = scan.nextInt();
+        scan.nextLine();
 
         Veiculo novoVeiculo = new Veiculo(placa,
                                         marca,
@@ -120,7 +144,7 @@ public class AppMain {
         boolean temp = seguradoraDesejada.getListaClientes().get(indiceCliente).getListaVeiculos().add(novoVeiculo);
     }
 
-    public void cadastrarSeguradora() {
+    public static void cadastrarSeguradora() {
         System.out.println("Digite o nome da nova seguradora: ");
         String nome = scan.nextLine();
         System.out.println("Digite o telefone da nova seguradora: ");
@@ -134,7 +158,7 @@ public class AppMain {
         listaSeguradoras.add(novaSeguradora);
     }
 
-    public boolean removerVeiculo(String nomeDonoVeiculo, int indiceSeguradora) {
+    public static boolean removerVeiculo(String nomeDonoVeiculo, int indiceSeguradora) {
         ArrayList<Cliente> listaClientesTemp = listaSeguradoras.get(indiceSeguradora).getListaClientes();
         for (int i = 0; i < listaClientesTemp.size(); i++) {
             if (listaClientesTemp.get(i).getNome() == nomeDonoVeiculo) {
@@ -144,6 +168,7 @@ public class AppMain {
                     System.out.println("(" + i + ") - " + listaVeiculosTemp.get(j).getMarca() + listaVeiculosTemp.get(j).getModelo() + listaVeiculosTemp.get(j).getPlaca());
                 }
                 int indiceVeiculo = scan.nextInt();
+                scan.nextLine();
                 listaSeguradoras.get(indiceSeguradora).getListaClientes().get(i).getListaVeiculos().remove(indiceVeiculo);
                 return true;
             }
@@ -152,7 +177,7 @@ public class AppMain {
         return false;
     }
 
-    public void removerSinistro(String nomeClienteSinistro, int indiceSeguradora) {
+    public static void removerSinistro(String nomeClienteSinistro, int indiceSeguradora) {
         ArrayList<Sinistro> listaSinistroTemp = listaSeguradoras.get(indiceSeguradora).getListaSinistros();
         System.out.println("Digite o índice associado ao sinistro que se deseja excluir.");
         for (int i = 0; i < listaSinistroTemp.size(); i++) {
@@ -161,19 +186,21 @@ public class AppMain {
             }
         }
         int indiceSinistro = scan.nextInt();
+        scan.nextLine();
         listaSeguradoras.get(indiceSeguradora).getListaSinistros().remove(indiceSinistro);
     }
 
 
 
-    public void menuInterativo() {
+    public static void menuInterativo() {
         int entradaPrimaria, entradaTemp, i = 0, j = 0, h = 0;
+        boolean loop = true;
         double entradaSecundaria;
         MenuOperacoes comandoPrimario, comandoSecundario;
 
         System.out.println("Bem-vindo ao sistema interativo de seguradoras.");
         // só acaba quando o usuário selecionar 0
-        while (true) {
+        while (loop) {
             System.out.println("Qual serviço deseja acessar?\n" + 
                                 "[1] - Cadastros\n" + 
                                 "[2] - Listar\n" + 
@@ -183,6 +210,7 @@ public class AppMain {
                                 "[6] - Calcular Receita Seguradora\n" + 
                                 "[0] - Sair.");
             entradaPrimaria = scan.nextInt();
+            scan.nextLine();
             comandoPrimario = MenuOperacoes.getEnumComando(entradaPrimaria);
 
             switch (comandoPrimario) {
@@ -193,6 +221,7 @@ public class AppMain {
                                         "[3] - Cadastrar Seguradora\n" + 
                                         "[4] - Voltar");
                     entradaSecundaria = scan.nextDouble();
+                    scan.nextLine();
                     entradaSecundaria = entradaPrimaria + entradaSecundaria / 10;
                     comandoSecundario = MenuOperacoes.getEnumComando(entradaSecundaria);
 
@@ -203,6 +232,7 @@ public class AppMain {
                                 Seguradora seguradoraCliente = listaSeguradoras.get(i);
                                 System.out.println("Deseja cadastrar um cliente físico (1) ou jurídico (2)?");
                                 entradaTemp = scan.nextInt();
+                                scan.nextLine();
                                 if (entradaTemp == 1) {
                                     cadastrarClientePF(seguradoraCliente);
                                 } else if (entradaTemp == 2) {
@@ -217,9 +247,9 @@ public class AppMain {
                             i = escolheSeguradora();
                             if (i >= 0) {
                                 Seguradora seguradoraVeiculo = listaSeguradoras.get(i);
-                                i = escolheCliente(seguradoraVeiculo);
-                                if (i >= 0) {
-                                    cadastrarVeiculo(seguradoraVeiculo, i);
+                                int indiceCliente = listaSeguradoras.get(i).escolheCliente();
+                                if (indiceCliente >= 0) {
+                                    cadastrarVeiculo(seguradoraVeiculo, indiceCliente);
                                 }
                             }
                             break;
@@ -242,6 +272,7 @@ public class AppMain {
                                         "[5] - Listar Veiculo por Seguradora\n" + 
                                         "[6] - Voltar");
                     entradaSecundaria = scan.nextDouble();
+                    scan.nextLine();
                     entradaSecundaria = entradaPrimaria + entradaSecundaria / 10;
                     comandoSecundario = MenuOperacoes.getEnumComando(entradaSecundaria);
 
@@ -249,6 +280,7 @@ public class AppMain {
                         case LISTAR_CLIENTES_POR_SEGURADORA:
                             System.out.println("Deseja visualizar os clientes físicos (1) ou jurídicos (2)?");
                             entradaTemp = scan.nextInt();
+                            scan.nextLine();
                             for (i = 0; i < listaSeguradoras.size(); i++) {
                                 if (entradaTemp == 1) {
                                     System.out.println("--- Clientes físicos da seguradora " + listaSeguradoras.get(i).getNome() + "---");
@@ -317,6 +349,7 @@ public class AppMain {
                                         "[3] - Excluir Sinistro\n" +
                                         "[4] - Voltar");
                     entradaSecundaria = scan.nextDouble();
+                    scan.nextLine();
                     entradaSecundaria = entradaPrimaria + entradaSecundaria / 10;
                     comandoSecundario = MenuOperacoes.getEnumComando(entradaSecundaria);
 
@@ -346,19 +379,38 @@ public class AppMain {
                 
                 case GERAR_SINISTRO:
                     i = escolheSeguradora();
-                    System.out.println("Digite a placa do veículo associado ao novo sinistro.");
-                    String placaNovoSin = scan.nextLine();
-                    listaSeguradoras.get(i).gerarSinistro(, listaSeguradoras.get(i).getListaClientes().get(escolheCliente(listaSeguradoras.get(i))))
+                    int indiceCliente = listaSeguradoras.get(i).escolheCliente();
+                    if (indiceCliente >= 0) {
+                        System.out.println("O veículo associado ao novo sinistro já está cadastrado (1) ou não (2)?");
+                        int condicaoVeiculo = scan.nextInt();
+                        scan.nextLine();
+                        if (condicaoVeiculo == 1) {
+                            int indiceVeiculo = escolheVeiculo(listaSeguradoras.get(i), listaSeguradoras.get(i).escolheCliente());
+                            listaSeguradoras.get(i).gerarSinistro(listaSeguradoras.get(i).getListaClientes().get(indiceCliente).getListaVeiculos().get(indiceVeiculo), 
+                                                                    listaSeguradoras.get(i).getListaClientes().get(indiceCliente));
+                        } else if (condicaoVeiculo == 2) {
+                            cadastrarVeiculo(listaSeguradoras.get(i), indiceCliente);
+                            int tamanhoListaVeiculos = listaSeguradoras.get(i).getListaClientes().get(indiceCliente).getListaVeiculos().size();
+                            listaSeguradoras.get(i).gerarSinistro(listaSeguradoras.get(i).getListaClientes().get(indiceCliente).getListaVeiculos().get(tamanhoListaVeiculos - 1), 
+                                                                    listaSeguradoras.get(i).getListaClientes().get(indiceCliente));
+                        }
+                    }
                     break;
 
                 case TRANSFERIR_SEGURO:
+                    i = escolheSeguradora();
+                    listaSeguradoras.get(i).transferirSeguro();
                     break;
 
                 case CALCULAR_RECEITA:
+                    i = escolheSeguradora();
+                    double receitaSeguradora = listaSeguradoras.get(i).calcularReceita();
+                    System.out.println("A receita da seguradora " + listaSeguradoras.get(i).getNome() + " é " + receitaSeguradora);
                     break;
 
                 case SAIR:
                     System.out.println("Encerrando sessão.");
+                    loop = false;
                     break;
 
                 default:
@@ -366,5 +418,9 @@ public class AppMain {
                     break;
             }
         }
+    }
+
+    public static void main() {
+        menuInterativo();
     }
 }

@@ -1,6 +1,7 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Seguradora {
 	private String nome;
@@ -250,5 +251,39 @@ public class Seguradora {
 		}
 
 		return receita;
+	}
+	
+	public int escolheCliente() {
+		Scanner scan = new Scanner(System.in);
+		if (getListaClientes().size() == 0) {
+			System.out.println("A seguradora escolhida ainda não possui nenhum cliente cadastrado. Por favor tente novamente.");
+			return -1;
+		} else {
+			System.out.println("Digite o número relacionado ao cliente desejado.");
+			for (int i = 0; i < getListaClientes().size(); i++) {
+				System.out.println("(" + i + ") - " + getListaClientes().get(i).getNome());
+			}
+			int indiceClienteEscolhido = scan.nextInt();
+			return indiceClienteEscolhido;
+		}
+	}
+
+	public void transferirSeguro() {
+		System.out.println("Primeiramente necessitamos do cliente cujo seguro deverá partir de.");
+		int indiceClienteOriginal = escolheCliente();
+		if (indiceClienteOriginal >= 0) {
+			System.out.println("Por fim, o cliente para qual o seguro será transferido");
+			int indiceClienteRecebido = escolheCliente();
+			if (indiceClienteRecebido >= 0) {
+				for (int i = 0; i < getListaClientes().get(indiceClienteOriginal).getListaVeiculos().size(); i++) {
+					getListaClientes().get(indiceClienteRecebido).getListaVeiculos().add(getListaClientes().get(indiceClienteOriginal).getListaVeiculos().get(i));
+					getListaClientes().get(indiceClienteOriginal).getListaVeiculos().remove(0);
+				}
+				double novoPrecoOriginal = calcularPrecoSeguroCliente(getListaClientes().get(indiceClienteOriginal));
+				double novoPrecoRecebido = calcularPrecoSeguroCliente(getListaClientes().get(indiceClienteRecebido));
+				getListaClientes().get(indiceClienteOriginal).setValorSeguro(novoPrecoOriginal);
+				getListaClientes().get(indiceClienteRecebido).setValorSeguro(novoPrecoRecebido);
+			}
+		}
 	}
 }
