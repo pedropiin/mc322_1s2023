@@ -5,23 +5,25 @@ import java.util.ArrayList;
 public class ClientePF extends Cliente {
     private String educacao;
     private String genero;
-    private String classeEconomica;
     private String cpf;
     private LocalDate dataNascimento;
-    private LocalDate dataLicenca;
+    private ArrayList<Veiculo> listaVeiculos;
 
-    public ClientePF(String nome, String endereco, 
-                    LocalDate dataLicenca, String educacao,
-                    String genero, String classeEconomica,
+    public ClientePF(String nome, 
+                    String endereco,
+                    String telefone,
+                    String email,  
+                    String educacao,
+                    String genero, 
                     ArrayList<Veiculo> listaVeiculos,
-                    String cpf, LocalDate dataNascimento, double valorSeguro) {
+                    String cpf, 
+                    LocalDate dataNascimento) {
 
-        super(nome, endereco, listaVeiculos, valorSeguro);
+        super(nome, endereco, telefone, email);
         this.educacao = educacao;
         this.genero = genero;
-        this.classeEconomica = classeEconomica;
+        this.listaVeiculos = listaVeiculos;
         this.cpf = cpf;
-        this.dataLicenca = dataLicenca;
         this.dataNascimento = dataNascimento;
     }
 
@@ -29,10 +31,10 @@ public class ClientePF extends Cliente {
     public String toString() {
         String all = "Nome: " + getNome() +
                 "\nEndereço: " + getEndereco() +
-                "\nData da Licença: " + getDataLicenca() +
-                "\nEducação: " + getEducacao() +
+                "\nNúmero de Telefone: " + getTelefone() + 
+                "\nEmail: " + getEmail() +
                 "\nGenero: " + getGenero() +
-                "\nClasse Econômica: " + getClasseEconomica() +
+                "\nGrau de Educação: " + getEducacao() +
                 "\nCPF: " + getCPF() +
                 "\nData de Nascimento: " + getDataNascimento();
 
@@ -55,20 +57,8 @@ public class ClientePF extends Cliente {
         this.genero = novoGenero;
     }
 
-    public String getClasseEconomica() {
-        return this.classeEconomica;
-    }
-
-    public void setClasseEconomica(String novaClasseEconomica) {
-        this.classeEconomica = novaClasseEconomica;
-    }
-
-    public LocalDate getDataLicenca() {
-        return this.dataLicenca;
-    }
-
-    public void setDataLicenca(LocalDate novaData) {
-        this.dataLicenca = novaData;
+    public ArrayList<Veiculo> getListaVeiculos() {
+        return this.listaVeiculos;
     }
 
     public String getCPF() {
@@ -108,5 +98,13 @@ public class ClientePF extends Cliente {
         }
         
         return score;
+    }
+
+    public boolean cadastrarVeiculo() {
+
+    }
+
+    public boolean removerVeiculo() {
+        
     }
 }

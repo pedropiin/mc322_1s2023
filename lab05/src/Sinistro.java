@@ -2,45 +2,32 @@ import java.time.LocalDate;
 import java.util.Random;
 
 public class Sinistro {
-	private int id;
+	private final int id;
 	private LocalDate data;
 	private String endereco;
-	private Seguradora seguradora;
-	private Veiculo veiculo;
-	public Cliente cliente;
+	private Condutor condutor;
+	private Seguro seguro;
 	
 	//Constructor da classe Sinistro
-	public Sinistro(LocalDate data, String endereco,
-					Seguradora seguradora, Veiculo veiculo,
-					Cliente cliente) {
+	public Sinistro(LocalDate data, 
+					String endereco,
+					Condutor condutor, 
+					Seguro seguro) {
+		this.id = geraId();
 		this.data = data;
 		this.endereco = endereco;
-		this.id = geraId();
-		this.seguradora = seguradora;
-		this.veiculo = veiculo;
-		this.cliente = cliente;
+		this.condutor = condutor;
+		this.seguro = seguro;
 	}
 
 	public String toString() {
-		String all = "Data: " + getData() + 
+		String all = "Id: " + getId() + 
 					"\nEndereço: " + getEndereco() +
-					"\nId: " + getId() + 
-					"\nSeguradora: " + seguradora.getNome() + 
-					"\nPlaca do Veículo: " + veiculo.getPlaca() +
-					"\nModelo do Veículo: " + veiculo.getModelo() +
-					"\nNome do Cliente: " + cliente.getNome();
+					"\nData: " + getData() + 
+					"\nCondutor: " + getCondutor() + 
+					"\nSeguro: " + getSeguro();
 
 		return all;
-	}
-	
-	/*
-	Método que gera um id aleatório para cada objeto
-	da classe Sinistro
-	 */
-	public int geraId() {
-		Random rand = new Random();
-		int limite = 999999999;
-		return rand.nextInt(limite);
 	}
 	
 	public int getId() {
@@ -63,27 +50,31 @@ public class Sinistro {
 		this.endereco = novoEndereco;
 	}
 
-	public Seguradora getSeguradora() {
-		return this.seguradora;
+	public Condutor getCondutor() {
+		return this.condutor;
 	}
 
-	public void setSeguradora(Seguradora novaSeguradora) {
-		this.seguradora = novaSeguradora;
+	public void setCondutor(Condutor novoCondutor) {
+		this.condutor = condutor;
 	}
 
-	public Veiculo getVeiculo() {
-		return this.veiculo;
+	public Seguro getSeguro() {
+		return this.seguro;
 	}
 
-	public void setVeiculo(Veiculo novoVeiculo) {
-		this.veiculo = novoVeiculo;
+	public void setSeguro(Seguro novoSeguro) {
+		this.seguro = novoSeguro;
 	}
 
-	public Cliente getCliente() {
-		return this.cliente;
-	}
+	//INÍCIO DOS MÉTODOS NÃO PADRÕES 
 
-	public void setCliente(Cliente novoClente) {
-		this.cliente = novoClente;
+	/*
+	 * Método que gera um id aleatório para cada objeto
+	 * da classe
+	 */
+	public int geraId() {
+		Random rand = new Random();
+		int limite = 999999999;
+		return rand.nextInt(limite);
 	}
 }

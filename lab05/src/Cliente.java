@@ -1,32 +1,32 @@
-import java.util.ArrayList;
-
-public class Cliente {
+public abstract class Cliente {
 	private String nome;
 	private String endereco;
-	private ArrayList<Veiculo> listaVeiculos;
-	private double valorSeguro;
+	private String telefone;
+	private String email;
 	
 	//Constructor do cliente
-	public Cliente(String nome, String endereco,
-					ArrayList<Veiculo> listaVeiculos,
-					double valorSeguro) {
+	public Cliente(String nome, 
+					String endereco,
+					String telefone,
+					String email) {
 		this.nome = nome;
 		this.endereco = endereco;
-		this.listaVeiculos = listaVeiculos;
-		this.valorSeguro = valorSeguro;
+		this.telefone = telefone;
+		this.email = email;
 	}
 
 	//Método padrão toString
 	public String toString() {
 		String all ="Nome: " + getNome() + 
 					"\nEndereço: " + getEndereco() +
-					"\nValor do Seguro: " + getValorSeguro();
+					"\nNúmero de Telefone: " + getTelefone() +
+					"\nEmail: " + getEmail();
 
 		return all;
 	}
 
 	public String getNome() {
-		return nome;
+		return this.nome;
 	}
 
 	public void setNome(String novoNome) {
@@ -41,38 +41,19 @@ public class Cliente {
 		this.endereco = novoEndereco;
 	}
 
-	public ArrayList<Veiculo> getListaVeiculos() {
-		return this.listaVeiculos;
+	public String getTelefone() {
+		return this.telefone;
 	}
 
-	public double getValorSeguro() {
-		return valorSeguro;
+	public void setTelefone(String novoTelefone) {
+		this.telefone = novoTelefone;
 	}
 
-	public void setValorSeguro(double novoValorSeguro) {
-		this.valorSeguro = novoValorSeguro;
+	public String getEmail() {
+		return this.email;
 	}
 
-	//INÍCIO DOS MÉTODOS NÃO PADRÕES;
-
-	/*
-	 * Nota-se que não há um método set para a lista
-	 * de veículos, já que não faz sentido. Para mais, essa 
-	 * variável é private, tornando-a inacessável para 
-	 * alterações. Então, necessita-se de um método para 
-	 * adicionar novos veículos.
-	 */
-	public void addVeiculo(Veiculo novoVeiculo) {
-		this.listaVeiculos.add(novoVeiculo);
-	}
-
-	/*
-	 * Método que não deve ser utilizado em objetos dessa 
-	 * classe, já que se torna de uma classe-pai. Assim, 
-	 * esse método é sobrecarregado em cada uma das classes
-	 * filho
-	 */
-	public double calculaScore() {
-		return 0;
+	public void setEmail(String novoEmail) {
+		this.email = novoEmail;
 	}
 }

@@ -4,22 +4,27 @@ import java.util.ArrayList;
 public class ClientePJ extends Cliente {
     private String cnpj;
     private LocalDate dataFundacao;
-    private int quantidadeFuncionarios;
+    private ArrayList<Frota> listaFrota;
 
-    public ClientePJ(String nome, String endereco, 
-                    ArrayList<Veiculo> listaVeiculos, String cnpj,
-                    LocalDate dataFundacao, double valorSeguro,
-                    int quantidadeFuncionarios) {
-        super(nome, endereco, listaVeiculos, valorSeguro);
+    public ClientePJ(String nome, 
+                    String endereco, 
+                    String telefone,
+                    String email,
+                    String cnpj,
+                    LocalDate dataFundacao, 
+                    ArrayList<Frota> listaFrota) {
+        super(nome, endereco, telefone, email);
         this.cnpj = cnpj;
         this.dataFundacao = dataFundacao;
-        this.quantidadeFuncionarios = quantidadeFuncionarios;
+        this.listaFrota = listaFrota;
     }
 
     @Override
     public String toString() {
         String all = "Nome: " + getNome() +
                 "\nEndereço: " + getEndereco() +
+                "\nNúmero de Telefone: " + getTelefone() +
+                "\nEmail: " + getEmail() + 
                 "\nCNPJ: " + getCNPJ() +
                 "\nData da Fundação: " + getDataFundacao();
 
@@ -42,12 +47,8 @@ public class ClientePJ extends Cliente {
         this.dataFundacao = novaDataFundacao;
     }
 
-    public int getQuantidadeFuncionarios() {
-        return this.quantidadeFuncionarios;
-    }
-    
-    public void setQuantidadeFuncionarios(int novaQuantidadeFuncionarios) {
-        this.quantidadeFuncionarios = novaQuantidadeFuncionarios;
+    public ArrayList<Frota> getListaFrota() {
+        return this.listaFrota;
     }
 
     //INÍCIO DOS MÉTODOS NÃO PADRÕES
@@ -63,5 +64,17 @@ public class ClientePJ extends Cliente {
                                 (1 + (quantidadeFuncionarios) / 100) *
                                 quantidadeCarros;
         return score;
+    }
+
+    public boolean cadastrarFrota() {
+
+    }
+
+    public boolean atualizarFrota() {
+
+    }
+
+    public boolean getVeiculosPorFrota() {
+        
     }
 }

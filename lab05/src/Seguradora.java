@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Seguradora {
+	private final String cnpj;
 	private String nome;
 	private String telefone;
 	private String email;
@@ -12,13 +13,20 @@ public class Seguradora {
 	private ArrayList<Cliente> listaClientes;
 	
 	//Constructor da classe Seguradora
-	public Seguradora(String nome, String telefone, String email, String endereco, ArrayList<Sinistro> listaSinistros, ArrayList<Cliente> listaClientes) {
+	public Seguradora(String nome, 
+					String telefone,
+					String email,
+					String endereco,
+					ArrayList<Sinistro> listaSinistros, 
+					ArrayList<Cliente> listaClientes,
+					String cnpj) {
 		this.nome = nome;
 		this.telefone = telefone;
 		this.email = email;
 		this.endereco = endereco;
 		this.listaSinistros = listaSinistros;
 		this.listaClientes = listaClientes;
+		this.cnpj = cnpj;
 	}
 
 	public String toString() {
@@ -62,6 +70,10 @@ public class Seguradora {
 		this.endereco = novoEndereco;
 	}
 
+	public String getCNPJ() {
+		return cnpj;
+	}	
+
 	public ArrayList<Sinistro> getListaSinistros() {
 		return this.listaSinistros;
 	}
@@ -69,6 +81,7 @@ public class Seguradora {
 	public ArrayList<Cliente> getListaClientes() {
 		return this.listaClientes;
 	}
+
 
 	//INÍCIO DOS MÉTODOS NÃO PADRÕES
 
@@ -139,6 +152,51 @@ public class Seguradora {
 			}
 		}
 		return listaClientesTipo;
+	}
+
+	/*
+	 * Método que, assim como o escolheSeguradora da classe
+	 * AppMain, permite que o usuário, interativamente,
+	 * selecione o usuário que deseja interagir com
+	 */
+	public int escolheCliente() {
+		Scanner scan = new Scanner(System.in);
+		if (getListaClientes().size() == 0) {
+			System.out.println(
+					"A seguradora escolhida ainda não possui nenhum cliente cadastrado. Por favor tente novamente.");
+			return -1;
+		} else {
+			System.out.println("Digite o número relacionado ao cliente desejado.");
+			for (int i = 0; i < getListaClientes().size(); i++) {
+				System.out.println("(" + i + ") - " + getListaClientes().get(i).getNome());
+			}
+			int indiceClienteEscolhido = scan.nextInt();
+			return indiceClienteEscolhido;
+		}
+	}
+
+	/*
+	 * Método que calcula o valor total do seguro de um
+	 * cliente, levando em conta a quantidade de sinistros
+	 * que ele possui
+	 */
+	public double calcularPrecoSeguroCliente(Cliente cliente) {
+		double preco = 0;
+		int quantidadeSinistros = numSinistrosCliente(cliente.getNome());
+
+		preco = cliente.calculaScore() * (1 + quantidadeSinistros);
+		if (preco < 0) {
+			System.out.println("Tal cliente não existe / não esta registrado.");
+		}
+		return preco;
+	}
+
+	public ArrayList<Seguro> getSegurosPorCliente() {
+
+	}
+
+	public ArrayList<Sinistro> getSinistrosPorCliente() {
+
 	}
 
 	/*
@@ -224,22 +282,6 @@ public class Seguradora {
 	}
 
 	/*
-	 * Método que calcula o valor total do seguro de um 
-	 * cliente, levando em conta a quantidade de sinistros
-	 * que ele possui
-	 */
-	public double calcularPrecoSeguroCliente(Cliente cliente) {
-		double preco = 0;
-		int quantidadeSinistros = numSinistrosCliente(cliente.getNome());
-
-		preco = cliente.calculaScore() * (1 + quantidadeSinistros);
-		if (preco < 0) {
-			System.out.println("Tal cliente não existe / não esta registrado.");
-		}
-		return preco;
-	}
-
-	/*
 	 * Método que soma o preço de todos os seguros de todos 
 	 * os clientes da seguradora, de modo a retornar a receita
 	 * total.
@@ -252,25 +294,9 @@ public class Seguradora {
 
 		return receita;
 	}
-	
-	/*
-	 * Método que, assim como o escolheSeguradora da classe
-	 * AppMain, permite que o usuário, interativamente,
-	 * selecione o usuário que deseja interagir com
-	 */
-	public int escolheCliente() {
-		Scanner scan = new Scanner(System.in);
-		if (getListaClientes().size() == 0) {
-			System.out.println("A seguradora escolhida ainda não possui nenhum cliente cadastrado. Por favor tente novamente.");
-			return -1;
-		} else {
-			System.out.println("Digite o número relacionado ao cliente desejado.");
-			for (int i = 0; i < getListaClientes().size(); i++) {
-				System.out.println("(" + i + ") - " + getListaClientes().get(i).getNome());
-			}
-			int indiceClienteEscolhido = scan.nextInt();
-			return indiceClienteEscolhido;
-		}
+
+	public boolean gerarSeguro() {
+
 	}
 
 	/*
@@ -296,5 +322,9 @@ public class Seguradora {
 				getListaClientes().get(indiceClienteRecebido).setValorSeguro(novoPrecoRecebido);
 			}
 		}
+	}
+
+	public boolean cancelarSeguro() {
+
 	}
 }
