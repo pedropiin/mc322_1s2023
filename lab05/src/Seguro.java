@@ -45,7 +45,7 @@ public abstract class Seguro {
     }
 
     public void setValorMensal(int novoValorMensal) {
-        this.valorMensal = valorMensal;
+        this.valorMensal = novoValorMensal;
     }
 
     public LocalDate getDataInicio() {
@@ -53,7 +53,7 @@ public abstract class Seguro {
     }
 
     public void setDataInicio(LocalDate novaDataInicio) {
-        this.dataInicio = dataInicio;
+        this.dataInicio = novaDataInicio;
     } 
 
     public LocalDate getDataFim() {
@@ -61,7 +61,7 @@ public abstract class Seguro {
     }
 
     public void setDataFim(LocalDate novaDataFim) {
-        this.dataFim = dataFim;
+        this.dataFim = novaDataFim;
     }
 
     public Seguradora getSeguradora() {
@@ -97,7 +97,7 @@ public abstract class Seguro {
     }
 
     public void calcularValor() {
-
+        
     }
 
     public void gerarSinistro() {
