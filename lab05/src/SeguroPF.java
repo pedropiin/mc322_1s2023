@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 
 public class SeguroPF extends Seguro {
@@ -58,7 +59,32 @@ public class SeguroPF extends Seguro {
 
     }
 
-    public void calcularValor() {
+    public double getFatorIdade(int idadeCliente) {
+        if (idadeCliente < 30) {
+            return CalcSeguro.FATOR_18_30.getValor();
+        } else if (idadeCliente >= 30 && idadeCliente <= 60) {
+            return CalcSeguro.FATOR_30_60.getValor();
+        } else {
+            return CalcSeguro.FATOR_60_90.getValor();
+        }
+    }
 
+    public double calcularValor() {
+        int idadeCliente = Period.between(this.cliente.getDataNascimento(), LocalDate.now()).getYears();
+        int quantidadeVeiculos = cliente.getListaVeiculos().size();
+        int quantidadeSinistrosCliente = getListaSinistros().size();
+        int quantidadeSinistrosCondutor = 0;
+        for (int i = 0; i < getListaCondutores().size(); i++) {
+            quantidadeSinistrosCondutor += getListaCondutores().get(i).getListaSinistros().size();
+        }
+        double valor = 0;
+
+        valor = CalcSeguro.VALOR_BASE.getValor() *
+                getFatorIdade(idadeCliente) * 
+                (1 + 1/(quantidadeVeiculos = 2)) * 
+                (2 + quantidadeSinistrosCliente / 10) * 
+                (5 + quantidadeSinistrosCondutor / 10);
+
+        return valor;
     }
 }

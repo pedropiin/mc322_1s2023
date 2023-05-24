@@ -88,19 +88,11 @@ public abstract class Seguro {
         return rand.nextInt(limite);
     }
 
-    public void autorizarCondutor() {
+    public abstract void autorizarCondutor();
 
-    }
+    public abstract void desautorizarCondutor();
 
-    public void desautorizarCondutor() {
+    public abstract double calcularValor();
 
-    }
-
-    public void calcularValor() {
-        
-    }
-
-    public void gerarSinistro() {
-
-    }
+    public abstract void gerarSinistro();
 }

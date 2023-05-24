@@ -2,6 +2,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class ClientePJ extends Cliente {
+    private int quantidadeFuncs;
     private String cnpj;
     private LocalDate dataFundacao;
     private ArrayList<Frota> listaFrota;
@@ -10,10 +11,12 @@ public class ClientePJ extends Cliente {
                     String endereco, 
                     String telefone,
                     String email,
+                    int quantidadeFuncs,
                     String cnpj,
                     LocalDate dataFundacao, 
                     ArrayList<Frota> listaFrota) {
         super(nome, endereco, telefone, email);
+        this.quantidadeFuncs = quantidadeFuncs;
         this.cnpj = cnpj;
         this.dataFundacao = dataFundacao;
         this.listaFrota = listaFrota;
@@ -25,10 +28,19 @@ public class ClientePJ extends Cliente {
                 "\nEndereço: " + getEndereco() +
                 "\nNúmero de Telefone: " + getTelefone() +
                 "\nEmail: " + getEmail() + 
+                "\nQuantidade de Funcionários: " + getQuantidadeFuncs() + 
                 "\nCNPJ: " + getCNPJ() +
                 "\nData da Fundação: " + getDataFundacao();
 
         return all;
+    }
+
+    public int getQuantidadeFuncs() {
+        return this.quantidadeFuncs;
+    }
+
+    public void setQuantidadeFuncs(int novaQuantidadeFuncs) {
+        this.quantidadeFuncs = novaQuantidadeFuncs;
     }
 
     public String getCNPJ() {

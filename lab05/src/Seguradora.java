@@ -9,22 +9,22 @@ public class Seguradora {
 	private String telefone;
 	private String email;
 	private String endereco;
-	private ArrayList<Sinistro> listaSinistros;
 	private ArrayList<Cliente> listaClientes;
+	private ArrayList<Seguro> listaSeguros;
 	
 	//Constructor da classe Seguradora
 	public Seguradora(String nome, 
 					String telefone,
 					String email,
 					String endereco,
-					ArrayList<Sinistro> listaSinistros, 
 					ArrayList<Cliente> listaClientes,
+					ArrayList<Seguro> listaSeguros, 
 					String cnpj) {
 		this.nome = nome;
 		this.telefone = telefone;
 		this.email = email;
 		this.endereco = endereco;
-		this.listaSinistros = listaSinistros;
+		this.listaSeguros = listaSeguros;
 		this.listaClientes = listaClientes;
 		this.cnpj = cnpj;
 	}
@@ -74,8 +74,8 @@ public class Seguradora {
 		return cnpj;
 	}	
 
-	public ArrayList<Sinistro> getListaSinistros() {
-		return this.listaSinistros;
+	public ArrayList<Seguro> getListaSeguros() {
+		return this.listaSeguros;
 	}
 
 	public ArrayList<Cliente> getListaClientes() {
@@ -105,25 +105,92 @@ public class Seguradora {
 	}
 
 	/*
-	 * Mètodo que recebe o nome de um cliente e passa 
-	 * por toda a listaClientes, procurando um cliente
-	 * com tal nome para remove-lo
+	 * Método que calcula o valor total do seguro de um
+	 * cliente, levando em conta a quantidade de sinistros
+	 * que ele possui
 	 */
-	public boolean removerCliente(String cliente) {
-		for (Cliente element : listaClientes) {
-			if (element.getNome() == cliente) {
-				for (int i = 0; i < listaSinistros.size(); i++) {
-					if (listaSinistros.get(i).cliente.getNome() == cliente) {
-						listaSinistros.remove(listaSinistros.get(i));
-					}
-				}
-				listaClientes.remove(element);
-				System.out.println("A remoção do cliente " + cliente + " foi bem sucedida.");
-				return true;
-			}
+	public double calcularPrecoSeguroCliente(Cliente cliente) {
+		double preco = 0;
+		int quantidadeSinistros = numSinistrosCliente(cliente.getNome());
+
+		preco = cliente.calculaScore() * (1 + quantidadeSinistros);
+		if (preco < 0) {
+			System.out.println("Tal cliente não existe / não esta registrado.");
 		}
-		System.out.println("O cliente " + cliente + "não existe.");
-		return false;
+		return preco;
+	}
+
+	/*
+	 * Método que soma o preço de todos os seguros de todos 
+	 * associados à seguradora em questão.
+	 */
+	public double calcularReceita() {
+		double receita = 0;
+		for (Seguro seguro : getListaSeguros()) {
+			receita += seguro.getValorMensal();
+		}
+
+		return receita;
+	}
+
+	public boolean cancelarSeguro() {
+
+	}
+
+	/*
+	 * Método que, assim como o escolheSeguradora da classe
+	 * AppMain, permite que o usuário, interativamente,
+	 * selecione o usuário que deseja interagir com
+	 */
+	public int escolheCliente() {
+		Scanner scan = new Scanner(System.in);
+		if (getListaClientes().size() == 0) {
+			System.out.println(
+					"A seguradora escolhida ainda não possui nenhum cliente cadastrado. Por favor tente novamente.");
+			return -1;
+		} else {
+			System.out.println("Digite o número relacionado ao cliente desejado.");
+			for (int i = 0; i < getListaClientes().size(); i++) {
+				System.out.println("(" + i + ") - " + getListaClientes().get(i).getNome());
+			}
+			int indiceClienteEscolhido = scan.nextInt();
+			return indiceClienteEscolhido;
+		}
+	}
+
+	public boolean gerarSeguro() {
+
+	}
+
+	/*
+	 * Método que recebe um objeto veículo e um objeto
+	 * cliente como parâmetros, e cria um novo sinistro
+	 * com data aleatória e o adiciona na listaSinistros
+	 */
+	public boolean gerarSinistro(Veiculo veiculo, Cliente cliente) {
+		Random rand = new Random();
+		int ano = 2023;
+		int mes = rand.nextInt(12 - 1) + 1;
+		int dia = rand.nextInt(28 - 1) + 1;
+
+		LocalDate dataSinistro = LocalDate.of(ano, mes, dia);
+		Sinistro novoSinistro = new Sinistro(dataSinistro,
+											"Rua do Acidente 666",
+											this,
+											veiculo,
+											cliente);
+		this.listaSinistros.add(novoSinistro);
+
+		return true;
+	}
+	
+
+	public ArrayList<Seguro> getSegurosPorCliente() {
+
+	}
+
+	public ArrayList<Sinistro> getSinistrosPorCliente() {
+
 	}
 
 	/*
@@ -152,99 +219,6 @@ public class Seguradora {
 			}
 		}
 		return listaClientesTipo;
-	}
-
-	/*
-	 * Método que, assim como o escolheSeguradora da classe
-	 * AppMain, permite que o usuário, interativamente,
-	 * selecione o usuário que deseja interagir com
-	 */
-	public int escolheCliente() {
-		Scanner scan = new Scanner(System.in);
-		if (getListaClientes().size() == 0) {
-			System.out.println(
-					"A seguradora escolhida ainda não possui nenhum cliente cadastrado. Por favor tente novamente.");
-			return -1;
-		} else {
-			System.out.println("Digite o número relacionado ao cliente desejado.");
-			for (int i = 0; i < getListaClientes().size(); i++) {
-				System.out.println("(" + i + ") - " + getListaClientes().get(i).getNome());
-			}
-			int indiceClienteEscolhido = scan.nextInt();
-			return indiceClienteEscolhido;
-		}
-	}
-
-	/*
-	 * Método que calcula o valor total do seguro de um
-	 * cliente, levando em conta a quantidade de sinistros
-	 * que ele possui
-	 */
-	public double calcularPrecoSeguroCliente(Cliente cliente) {
-		double preco = 0;
-		int quantidadeSinistros = numSinistrosCliente(cliente.getNome());
-
-		preco = cliente.calculaScore() * (1 + quantidadeSinistros);
-		if (preco < 0) {
-			System.out.println("Tal cliente não existe / não esta registrado.");
-		}
-		return preco;
-	}
-
-	public ArrayList<Seguro> getSegurosPorCliente() {
-
-	}
-
-	public ArrayList<Sinistro> getSinistrosPorCliente() {
-
-	}
-
-	/*
-	 * Método que recebe um objeto veículo e um objeto
-	 * cliente como parâmetros, e cria um novo sinistro
-	 * com data aleatória e o adiciona na listaSinistros
-	 */
-	public boolean gerarSinistro(Veiculo veiculo, Cliente cliente) {
-		Random rand = new Random();
-		int ano = 2023;
-		int mes = rand.nextInt(12 - 1) + 1;
-		int dia = rand.nextInt(28 - 1) + 1;
-
-		LocalDate dataSinistro = LocalDate.of(ano, mes, dia);
-		Sinistro novoSinistro = new Sinistro(dataSinistro,
-											"Rua do Acidente 666",
-											this,
-											veiculo,
-											cliente);
-		this.listaSinistros.add(novoSinistro);
-
-		return true;
-	}
-
-	/*
-	 * Método que recebe uma string contendo o nome de um cliente
-	 * e passa pela listaSinistros. Assim, printa todo sinistro 
-	 * que encontrar associado ao nome do cliente em questão.
-	 */
-	public boolean visualizarSinistro(String cliente) {
-		if (listaSinistros.size() == 0) {
-			System.out.println("Não há sinistros registrados no nome desse cliente.");
-			return false;
-		} else {
-			int numSinistrosCliente = 0;
-			for (Sinistro elementSin : listaSinistros) {
-				if (elementSin.cliente.getNome() == cliente) {
-					System.out.println(elementSin);
-					numSinistrosCliente++;
-				}
-			}
-			if (numSinistrosCliente > 0) {
-				return true;
-			} else {
-				System.out.println("O cliente não possui sinistros.");
-				return false;
-			}
-		}
 	}
 
 	/*
@@ -282,22 +256,54 @@ public class Seguradora {
 	}
 
 	/*
-	 * Método que soma o preço de todos os seguros de todos 
-	 * os clientes da seguradora, de modo a retornar a receita
-	 * total.
+	 * Mètodo que recebe o nome de um cliente e passa 
+	 * por toda a listaClientes, procurando um cliente
+	 * com tal nome para remove-lo
 	 */
-	public double calcularReceita() {
-		double receita = 0;
-		for (Cliente cliente : listaClientes) {
-			receita += calcularPrecoSeguroCliente(cliente);
+	public boolean removerCliente(String cliente) {
+		for (Cliente element : listaClientes) {
+			if (element.getNome() == cliente) {
+				for (int i = 0; i < listaSinistros.size(); i++) {
+					if (listaSinistros.get(i).cliente.getNome() == cliente) {
+						listaSinistros.remove(listaSinistros.get(i));
+					}
+				}
+				listaClientes.remove(element);
+				System.out.println("A remoção do cliente " + cliente + " foi bem sucedida.");
+				return true;
+			}
 		}
-
-		return receita;
+		System.out.println("O cliente " + cliente + "não existe.");
+		return false;
 	}
 
-	public boolean gerarSeguro() {
 
+	/*
+	 * Método que recebe uma string contendo o nome de um cliente
+	 * e passa pela listaSinistros. Assim, printa todo sinistro 
+	 * que encontrar associado ao nome do cliente em questão.
+	 */
+	public boolean visualizarSinistro(String cliente) {
+		if (listaSinistros.size() == 0) {
+			System.out.println("Não há sinistros registrados no nome desse cliente.");
+			return false;
+		} else {
+			int numSinistrosCliente = 0;
+			for (Sinistro elementSin : listaSinistros) {
+				if (elementSin.cliente.getNome() == cliente) {
+					System.out.println(elementSin);
+					numSinistrosCliente++;
+				}
+			}
+			if (numSinistrosCliente > 0) {
+				return true;
+			} else {
+				System.out.println("O cliente não possui sinistros.");
+				return false;
+			}
+		}
 	}
+
 
 	/*
 	 * Método que transfere o seguro de um cliente para outro
@@ -324,7 +330,4 @@ public class Seguradora {
 		}
 	}
 
-	public boolean cancelarSeguro() {
-
-	}
 }

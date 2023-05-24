@@ -1,7 +1,9 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Frota {
+    static Scanner scan = new Scanner(System.in);
     private String code;
     private ArrayList<Veiculo> listaVeiculos;
 
@@ -29,6 +31,48 @@ public class Frota {
     }
 
     //INÍCIO DOS MÉTODOS NÃO PADRÕES
+
+    public boolean addVeiculo() {
+        System.out.println("Digite a placa do veículo: ");
+        String placa = scan.nextLine();
+        System.out.println("Digite a marca do veículo: ");
+        String marca = scan.nextLine();
+        System.out.println("Digite o modelo do veículo: ");
+        String modelo = scan.nextLine();
+        System.out.println("Digite o ano de fabricação do veículo: ");
+        int anoFabricacao = scan.nextInt();
+        scan.nextLine();
+
+        Veiculo novoVeiculo = new Veiculo(placa, 
+                                        marca,
+                                        modelo,
+                                        anoFabricacao);
+        this.listaVeiculos.add(novoVeiculo);
+        return true;
+    }
+
+    public boolean removeVeiculo() {
+        if (listaVeiculos.size() == 0) {
+            System.out.println("A frota em questão (código = " + this.code + ") não possui nenhum veículo cadastrado.");
+            return false;
+        } else {
+            Veiculo veiculoIteracao;
+            System.out.println("Digite o número relacionado ao veículo desejado.");
+            for (int i = 0; i < listaVeiculos.size(); i++) {
+                veiculoIteracao = listaVeiculos.get(i);
+                System.out.println("(" + i + ") - " + veiculoIteracao.getMarca() + " " + veiculoIteracao.getModelo() + " " + veiculoIteracao.getPlaca());
+            }
+            int entrada = scan.nextInt();
+            scan.nextLine();
+            if (entrada < 0 || entrada > listaVeiculos.size() - 1) {
+                System.out.println("Por favor tente novamente, digitando um número válido.");
+                return false;
+            } else {
+                listaVeiculos.remove(entrada);
+                return true;
+            }
+        }
+    }
 
     public String geraCode() { 
         Random rand = new Random();
