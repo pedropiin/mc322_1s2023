@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Seguradora {
+	Scanner scan = new Scanner(System.in);
 	private final String cnpj;
 	private String nome;
 	private String telefone;
@@ -105,22 +106,6 @@ public class Seguradora {
 	}
 
 	/*
-	 * Método que calcula o valor total do seguro de um
-	 * cliente, levando em conta a quantidade de sinistros
-	 * que ele possui
-	 */
-	public double calcularPrecoSeguroCliente(Cliente cliente) {
-		double preco = 0;
-		int quantidadeSinistros = numSinistrosCliente(cliente.getNome());
-
-		preco = cliente.calculaScore() * (1 + quantidadeSinistros);
-		if (preco < 0) {
-			System.out.println("Tal cliente não existe / não esta registrado.");
-		}
-		return preco;
-	}
-
-	/*
 	 * Método que soma o preço de todos os seguros de todos 
 	 * associados à seguradora em questão.
 	 */
@@ -134,7 +119,21 @@ public class Seguradora {
 	}
 
 	public boolean cancelarSeguro() {
-
+		int indiceSeguro;
+		if (getListaSeguros().size() == 0) {
+			System.out.println("Não há nenhum seguro cadastrado na seguradora " + getNome() + ".");
+			return false;
+		} else {
+			System.out.println("Selecione o seguro que se deseja cancelar");
+			for (int i = 0; i < getListaSeguros().size(); i++) {
+				System.out.println("(" + i + ") - "  + getListaSeguros().get(i).getId());
+			}
+			indiceSeguro = scan.nextInt();
+			scan.nextLine();
+			getListaSeguros().remove(indiceSeguro);
+			System.out.println("Seguro removido com sucesso.");
+			return true;
+		}
 	}
 
 	/*
@@ -143,10 +142,8 @@ public class Seguradora {
 	 * selecione o usuário que deseja interagir com
 	 */
 	public int escolheCliente() {
-		Scanner scan = new Scanner(System.in);
 		if (getListaClientes().size() == 0) {
-			System.out.println(
-					"A seguradora escolhida ainda não possui nenhum cliente cadastrado. Por favor tente novamente.");
+			System.out.println("A seguradora escolhida ainda não possui nenhum cliente cadastrado. Por favor tente novamente.");
 			return -1;
 		} else {
 			System.out.println("Digite o número relacionado ao cliente desejado.");
@@ -159,7 +156,24 @@ public class Seguradora {
 	}
 
 	public boolean gerarSeguro() {
-
+		int indiceCliente, indiceVeiculo, indiceFrota;
+		indiceCliente = escolheCliente();
+		if (indiceCliente == -1) {
+			return false;
+		} else {
+			if (listaClientes.get(indiceCliente) instanceof ClientePF) {
+				ClientePF cliente = ((ClientePF) listaClientes.get(indiceCliente));
+				indiceVeiculo = cliente.escolheVeiculo();
+				SeguroPF novoSeguroPF = new SeguroPF(0, LocalDate.now(), LocalDate.now().plusYears(1), this, new ArrayList<Sinistro>(), new ArrayList<Condutor>(), cliente.getListaVeiculos().get(indiceVeiculo), cliente);
+				getListaSeguros().add(novoSeguroPF);
+			} else if (listaClientes.get(indiceCliente) instanceof ClientePJ) {
+				ClientePJ cliente = ((ClientePJ) listaClientes.get(indiceCliente));
+				indiceFrota = cliente.escolheFrota();
+				SeguroPJ novoSeguroPJ = new SeguroPJ(0, LocalDate.now(), LocalDate.now().plusYears(1), this, new ArrayList<Sinistro>(), new ArrayList<Condutor>(), cliente.getlistaFrotas().get(indiceFrota), cliente);
+				getListaSeguros().add(novoSeguroPJ);
+			}
+			return true;
+		}
 	}
 
 	/*
@@ -168,29 +182,43 @@ public class Seguradora {
 	 * com data aleatória e o adiciona na listaSinistros
 	 */
 	public boolean gerarSinistro(Veiculo veiculo, Cliente cliente) {
-		Random rand = new Random();
-		int ano = 2023;
-		int mes = rand.nextInt(12 - 1) + 1;
-		int dia = rand.nextInt(28 - 1) + 1;
+		// Random rand = new Random();
+		// int ano = 2023;
+		// int mes = rand.nextInt(12 - 1) + 1;
+		// int dia = rand.nextInt(28 - 1) + 1;
 
-		LocalDate dataSinistro = LocalDate.of(ano, mes, dia);
-		Sinistro novoSinistro = new Sinistro(dataSinistro,
-											"Rua do Acidente 666",
-											this,
-											veiculo,
-											cliente);
-		this.listaSinistros.add(novoSinistro);
+		// LocalDate dataSinistro = LocalDate.of(ano, mes, dia);
+		// Sinistro novoSinistro = new Sinistro(dataSinistro,
+		// 									"Rua do Acidente 666",
+		// 									this,
+		// 									veiculo,
+		// 									cliente);
+		// this.listaSinistros.add(novoSinistro);
 
 		return true;
 	}
 	
 
-	public ArrayList<Seguro> getSegurosPorCliente() {
+	public ArrayList<Seguro> getSegurosPorCliente(Cliente cliente) {
+		ArrayList<Seguro> listaSegurosCliente = new ArrayList<Seguro>();
+		for (Seguro seguro : listaSeguros) {
+			if (seguro.getCliente() == cliente) {
+				listaSegurosCliente.add(seguro);
+			}
+		}
 
+		return listaSegurosCliente;
 	}
 
-	public ArrayList<Sinistro> getSinistrosPorCliente() {
+	public ArrayList<Sinistro> getSinistrosPorCliente(Cliente cliente) {
+		ArrayList<Sinistro> listaSinistrosCliente = new ArrayList<Sinistro>();
+		for (Sinistro sinistro : listarSinistros()) {
+			if (sinistro.getSeguro().getCliente() == cliente) {
+				listaSinistrosCliente.add(sinistro);
+			}
+		}
 
+		return listaSinistrosCliente;
 	}
 
 	/*

@@ -47,8 +47,27 @@ public class Frota {
                                         marca,
                                         modelo,
                                         anoFabricacao);
-        this.listaVeiculos.add(novoVeiculo);
+        getListaVeiculos().add(novoVeiculo);
         return true;
+    }
+
+    public String geraCode() {
+        Random rand = new Random();
+        String code = "";
+        int minCharMinusculo = 97, minCharMaiusculo = 65, maxRangeAscii = 26;
+        char novoChar;
+
+        for (int i = 0; i < 20; i++) {
+            int asciiNovoChar = rand.nextInt(maxRangeAscii);
+            if (i % 2 == 0) {
+                novoChar = (char) (asciiNovoChar + minCharMinusculo);
+            } else {
+                novoChar = (char) (asciiNovoChar + minCharMaiusculo);
+            }
+            code += novoChar;
+        }
+
+        return code;
     }
 
     public boolean removeVeiculo() {
@@ -72,24 +91,5 @@ public class Frota {
                 return true;
             }
         }
-    }
-
-    public String geraCode() { 
-        Random rand = new Random();
-        String code = "";
-        int minCharMinusculo = 97, minCharMaiusculo = 65, maxRangeAscii = 26;
-        char novoChar;
-
-        for (int i = 0; i < 20; i++) {
-            int asciiNovoChar = rand.nextInt(maxRangeAscii);
-            if (i % 2 == 0) {
-                novoChar = (char)(asciiNovoChar + minCharMinusculo);
-            } else {
-                novoChar = (char)(asciiNovoChar + minCharMaiusculo);
-            }
-            code += novoChar;
-        }
-
-        return code;
     }
 }

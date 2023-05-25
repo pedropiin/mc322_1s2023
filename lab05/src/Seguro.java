@@ -76,6 +76,8 @@ public abstract class Seguro {
         return this.listaCondutores;
     }
 
+    public abstract Cliente getCliente();
+
     //INÍCIO DOS MÉTODOS NÃO PADRÕES
 
     /*

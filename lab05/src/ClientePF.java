@@ -1,8 +1,10 @@
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ClientePF extends Cliente {
+    Scanner scan = new Scanner(System.in);
     private String educacao;
     private String genero;
     private String cpf;
@@ -101,10 +103,63 @@ public class ClientePF extends Cliente {
     }
 
     public boolean cadastrarVeiculo() {
+        System.out.println("Digite a placa do veículo: ");
+        String placa = scan.nextLine();
+        System.out.println("Digite a marca do veículo: ");
+        String marca = scan.nextLine();
+        System.out.println("Digite o modelo do veículo: ");
+        String modelo = scan.nextLine();
+        System.out.println("Digite o ano de fabricação do veículo: ");
+        int anoFabricacao = scan.nextInt();
+        scan.nextLine();
 
+        Veiculo novoVeiculo = new Veiculo(placa,
+                marca,
+                modelo,
+                anoFabricacao);
+        getListaVeiculos().add(novoVeiculo);
+        return true;
+    }
+
+    public int escolheVeiculo() {
+        int indiceVeiculo, numVeiculos = listaVeiculos.size();
+        if (numVeiculos == 0) {
+            System.out.println("O cliente selecionado não possui nenhum veículo cadastrado.");
+            return -1;
+        } else {
+            System.out.println("Selecione o veículo desejado");
+            for (int i = 0; i < numVeiculos; i++) {
+                System.out.println("(" + i + ") - " + listaVeiculos.get(i).getMarca() + " " + listaVeiculos.get(i).getModelo() + " " + listaVeiculos.get(i).getPlaca());
+            }
+            indiceVeiculo = scan.nextInt();
+            scan.nextLine();
+
+            return indiceVeiculo;
+        }
     }
 
     public boolean removerVeiculo() {
-        
+        if (getListaVeiculos().size() == 0) {
+            System.out.println("O cliente " + getNome() + " não possui nenhum veículo cadastrado.");
+            return false;
+        } else {
+            Veiculo veiculoIteracao;
+            System.out.println("Digite o número relacionado ao veículo desejado.");
+            for (int i = 0; i < listaVeiculos.size(); i++) {
+                veiculoIteracao = listaVeiculos.get(i);
+                System.out.println("(" + i + ") - " + veiculoIteracao.getMarca() + " " + veiculoIteracao.getModelo()
+                        + " " + veiculoIteracao.getPlaca());
+            }
+            int entrada = scan.nextInt();
+            scan.nextLine();
+            if (entrada < 0 || entrada > listaVeiculos.size() - 1) {
+                System.out.println("Por favor tente novamente, digitando um número válido.");
+                return false;
+            } else {
+                listaVeiculos.remove(entrada);
+                System.out.println("Veículo removido com sucesso");
+                return true;
+            }
+        }
     }
 }

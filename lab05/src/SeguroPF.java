@@ -6,8 +6,7 @@ public class SeguroPF extends Seguro {
     private Veiculo veiculo;
     private ClientePF cliente;
 
-    public SeguroPF(int id,
-                    int valorMensal,
+    public SeguroPF(int valorMensal,
                     LocalDate dataInicio,
                     LocalDate dataFim,
                     Seguradora seguradora,
@@ -51,6 +50,25 @@ public class SeguroPF extends Seguro {
 
     }
 
+    public double calcularValor() {
+        int idadeCliente = Period.between(this.cliente.getDataNascimento(), LocalDate.now()).getYears();
+        int quantidadeVeiculos = cliente.getListaVeiculos().size();
+        int quantidadeSinistrosCliente = getListaSinistros().size();
+        int quantidadeSinistrosCondutor = 0;
+        for (int i = 0; i < getListaCondutores().size(); i++) {
+            quantidadeSinistrosCondutor += getListaCondutores().get(i).getListaSinistros().size();
+        }
+        double valor = 0;
+
+        valor = CalcSeguro.VALOR_BASE.getValor() *
+                getFatorIdade(idadeCliente) *
+                (1 + 1 / (quantidadeVeiculos / 2)) *
+                (2 + quantidadeSinistrosCliente / 10) *
+                (5 + quantidadeSinistrosCondutor / 10);
+
+        return valor;
+    }
+
     public boolean desautorizarCondutor() {
 
     }
@@ -69,22 +87,5 @@ public class SeguroPF extends Seguro {
         }
     }
 
-    public double calcularValor() {
-        int idadeCliente = Period.between(this.cliente.getDataNascimento(), LocalDate.now()).getYears();
-        int quantidadeVeiculos = cliente.getListaVeiculos().size();
-        int quantidadeSinistrosCliente = getListaSinistros().size();
-        int quantidadeSinistrosCondutor = 0;
-        for (int i = 0; i < getListaCondutores().size(); i++) {
-            quantidadeSinistrosCondutor += getListaCondutores().get(i).getListaSinistros().size();
-        }
-        double valor = 0;
 
-        valor = CalcSeguro.VALOR_BASE.getValor() *
-                getFatorIdade(idadeCliente) * 
-                (1 + 1/(quantidadeVeiculos = 2)) * 
-                (2 + quantidadeSinistrosCliente / 10) * 
-                (5 + quantidadeSinistrosCondutor / 10);
-
-        return valor;
-    }
 }

@@ -1,11 +1,13 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ClientePJ extends Cliente {
+    Scanner scan = new Scanner(System.in);
     private int quantidadeFuncs;
     private String cnpj;
     private LocalDate dataFundacao;
-    private ArrayList<Frota> listaFrota;
+    private ArrayList<Frota> listaFrotas;
 
     public ClientePJ(String nome, 
                     String endereco, 
@@ -14,12 +16,12 @@ public class ClientePJ extends Cliente {
                     int quantidadeFuncs,
                     String cnpj,
                     LocalDate dataFundacao, 
-                    ArrayList<Frota> listaFrota) {
+                    ArrayList<Frota> listaFrotas) {
         super(nome, endereco, telefone, email);
         this.quantidadeFuncs = quantidadeFuncs;
         this.cnpj = cnpj;
         this.dataFundacao = dataFundacao;
-        this.listaFrota = listaFrota;
+        this.listaFrotas = listaFrotas;
     }
 
     @Override
@@ -59,34 +61,65 @@ public class ClientePJ extends Cliente {
         this.dataFundacao = novaDataFundacao;
     }
 
-    public ArrayList<Frota> getListaFrota() {
-        return this.listaFrota;
+    public ArrayList<Frota> getListaFrotas() {
+        return this.listaFrotas;
     }
 
     //INÍCIO DOS MÉTODOS NÃO PADRÕES
 
-    /*
-     * Método que cálcula o valor de cobrado de um cliente
-     * por parte da seguradora, levando em conta taxas
-     * associadas à quantidade de funcionários da empresa.
-     */
-    public double calculaScore() {
-        int quantidadeCarros = this.getListaVeiculos().size();
-        double score = CalcSeguro.VALOR_BASE.getValor() *
-                                (1 + (quantidadeFuncionarios) / 100) *
-                                quantidadeCarros;
-        return score;
+    public boolean atualizarFrota() {
+        int entrada, indiceFrota = escolheFrota();
+        System.out.println("Selecione a função desejada?\n" + 
+                            "[1] - Adicionar um veículo à frota\n" + 
+                            "[2] - Remover um veículo da frota\n" + 
+                            "[3] - Remover frota");
+        entrada = scan.nextInt();
+        scan.nextLine();
+        if (entrada == 1) {
+            listaFrotas.get(indiceFrota).addVeiculo();
+        } else if (entrada == 2) {
+            listaFrotas.get(indiceFrota).removeVeiculo();
+        } else if (entrada == 3) {
+            System.out.println("Frota de código " + listaFrotas.get(indiceFrota).getCode() + " removida.");
+            listaFrotas.remove(indiceFrota);
+        } else {
+            System.out.println("Por favor selecione uma opção válida.");
+            return false;
+        }
+        return true;
     }
 
     public boolean cadastrarFrota() {
-
+        Frota novaFrota = new Frota(new ArrayList<Veiculo>());
+        getlistaFrotas().add(novaFrota);
+        System.out.println("Uma nova frota (código: " + novaFrota.getCode() + ") foi cadastrada com sucesso");
+        return true;
     }
 
-    public boolean atualizarFrota() {
+    public int escolheFrota() {
+		int indiceFrota;
+		System.out.println("Selecione a frota desejada.");
+		for (int i = 0; i < listaFrotas.size(); i++) {
+			System.out.println("(" + i + ") - " + listaFrotas.get(i).getCode());
+		}
+		indiceFrota = scan.nextInt();
+		scan.nextLine();
 
-    }
+		return indiceFrota;
+	}
 
     public boolean getVeiculosPorFrota() {
-        
+        if (getlistaFrotas().size() == 0) {
+            System.out.println("O cliente " + getNome() + " não possui nenhuma frota cadastrada.");
+            return false;
+        } else {
+            for (Frota frota : getlistaFrotas()) {
+                System.out.println("---Veículos da frota de código " + frota.getCode() + "---");
+                for (Veiculo veiculo : frota.getListaVeiculos()) {
+                    System.out.println(veiculo.getMarca() + " " + veiculo.getModelo() + " " + veiculo.getPlaca());
+                }
+            }
+            return true;
+        }
     }
 }

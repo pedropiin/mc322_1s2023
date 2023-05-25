@@ -6,8 +6,7 @@ public class SeguroPJ extends Seguro {
     public Frota frota;
     public ClientePJ cliente;
 
-    public SeguroPJ(int id,
-                    int valorMensal,
+    public SeguroPJ(int valorMensal,
                     LocalDate dataInicio,
                     LocalDate dataFim,
                     Seguradora seguradora,
@@ -27,18 +26,14 @@ public class SeguroPJ extends Seguro {
                     "\nData de Início: " + getDataInicio() +
                     "\nData de Fim: " + getDataFim() +
                     "\nSeguradora: " + getSeguradora() +
-                    "\nVeiculo: " + getVeiculo() + 
+                    "\nCódigo da Frota: " + getFrota() + 
                     "\nCliente Responsável: " + getCliente();
 
         return all;
     }
 
-    public Veiculo getVeiculo() {
-        return this.veiculo;
-    }
-
-    public void setVeiculo(Veiculo novoVeiculo) {
-        this.veiculo = novoVeiculo;
+    public Frota getFrota() {
+        return this.frota;
     }
 
     public Cliente getCliente() {
@@ -62,8 +57,8 @@ public class SeguroPJ extends Seguro {
     public double calcularValor() {
         int quantidadeFuncionarios = cliente.getQuantidadeFuncs();
         int quantidadeVeiculos = 0;
-        for (int i = 0; i < cliente.getListaFrota().size(); i++) {
-            quantidadeVeiculos += cliente.getListaFrota().get(i).getListaVeiculos().size();
+        for (int i = 0; i < cliente.getListaFrotas().size(); i++) {
+            quantidadeVeiculos += cliente.getListaFrotas().get(i).getListaVeiculos().size();
         }
         int anosPosFundacao = Period.between(cliente.getDataFundacao(), LocalDate.now()).getYears();
         int quantidadeSinistrosCliente = getListaSinistros().size();
