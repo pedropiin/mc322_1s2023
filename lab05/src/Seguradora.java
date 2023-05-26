@@ -2,6 +2,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+import java.time.format.DateTimeFormatter;
 
 public class Seguradora {
 	Scanner scan = new Scanner(System.in);
@@ -92,17 +93,64 @@ public class Seguradora {
 	 * se certificando de que tal cliente já não esta 
 	 * cadastrado.
 	 */
-	public boolean cadastrarCliente(Cliente cliente) {
-		for (Cliente element : listaClientes) {
-			if (element.getNome() == cliente.getNome()) {
-				System.out.println("O cliente " + cliente.getNome() + "já esta cadastrádo. ");
-				return false;
+	public boolean cadastrarCliente(String tipoCliente) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		if (tipoCliente == "pf" || tipoCliente == "PF") {
+			System.out.println("Digite o nome do cliente: ");
+			String nome = scan.nextLine();
+			if (!Validacao.apenasChars(nome)) {
+				System.out.println("Nomes não podem conter caracteres além das letras e espaços. Por favor tente novamente.");
+			} else {
+				System.out.println("Digite o CPF do cliente: ");
+				String cpf = scan.nextLine();
+				if (!Validacao.validarCPF(cpf)) {
+					System.out.println("Por favor verifique os dígitos inseridos e tente novamente.");
+				} else {
+					System.out.println("Digite o endereço do cliente: ");
+					String endereco = scan.nextLine();
+					System.out.println("Digite o telefone do cliente: ");
+					String telefone = scan.nextLine();
+					System.out.println("Digite o email do cliente: ");
+					String email = scan.nextLine();
+					System.out.println("Digite o grau de educação do cliente: ");
+					String educacao = scan.nextLine();
+					System.out.println("Digite o gênero do cliente: ");
+					String genero = scan.nextLine();
+					System.out.println("Digite a data de nascimento do cliente no formato DD/MM/YYYYY: ");
+					LocalDate dataNascimento = LocalDate.parse(scan.nextLine(), dtf);
+
+					ClientePF novoCliente = new ClientePF(nome, endereco, telefone, email, educacao, genero, new ArrayList<Veiculo>(), cpf, dataNascimento);
+					getListaClientes().add(novoCliente);
+					return true;
+				}
+			}
+		} else if (tipoCliente == "pj" || tipoCliente == "PJ") {
+			System.out.println("Digite o nome do cliente: ");
+			String nome = scan.nextLine();
+			System.out.println("Digite o CNPJ do cliente: ");
+			String cnpj = scan.nextLine();
+			if (!Validacao.validarCNPJ(cnpj)) {
+				System.out.println("Por favor verifique os dígitos inseridos e tente novamente.");
+			} else {
+				System.out.println("Digite o endereço do cliente: ");
+				String endereco = scan.nextLine();
+				System.out.println("Digite o telefone do cliente: ");
+				String telefone = scan.nextLine();
+				System.out.println("Digite o email do cliente: ");
+				String email = scan.nextLine();
+				System.out.println("Digite a data de fundação do cliente no formato DD/MM/YYYYY: ");
+				LocalDate dataFundacao = LocalDate.parse(scan.nextLine(), dtf);
+				System.out.println("Digite o número de funcionários do cliente: ");
+				int quantidadeFuncionarios = scan.nextInt();
+				scan.nextLine();
+
+				ClientePJ novoCliente = new ClientePJ(nome, endereco, telefone, email, quantidadeFuncionarios, cnpj, dataFundacao, new ArrayList<Frota>())
+				getListaClientes().add(novoCliente);
+				return true;
 			}
 		}
-		listaClientes.add(cliente);
-		System.out.println("Cliente " + cliente.getNome() + " cadastrado.");
-
-		return true;
+		System.out.println("Por favor insira um tipo de cliente válido.");
+		return false;
 	}
 
 	/*

@@ -20,7 +20,6 @@ public class ClientePF extends Cliente {
                     ArrayList<Veiculo> listaVeiculos,
                     String cpf, 
                     LocalDate dataNascimento) {
-
         super(nome, endereco, telefone, email);
         this.educacao = educacao;
         this.genero = genero;

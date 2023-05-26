@@ -1,4 +1,3 @@
-import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -69,92 +68,6 @@ public class AppMain {
             return indiceVeiculo;
         }
     }
-
-    /*
-     * Método usado no menu interativo para perguntar ao 
-     * usuário todas as informações necessárias de um cliente
-     * físico para cadastrá-lo
-     */
-    public static void cadastrarClientePF(Seguradora seguradoraDesejada) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        System.out.println("Digite o nome do cliente: ");
-        String nome = scan.nextLine();
-        if (!Validacao.apenasChars(nome)) {
-            System.out.println("Nomes não podem conter caracteres além das letras e espaços. Por favor tente novamente.");
-        } else {
-            System.out.println("Digite o CPF do cliente: ");
-            String cpf = scan.nextLine();
-            if (!Validacao.validarCPF(cpf)) {
-                System.out.println("Por favor verifique os dígitos inseridos e tente novamente.");
-            } else {
-                System.out.println("Digite o endereço do cliente: ");
-                String endereco = scan.nextLine();
-                System.out.println("Digite a data da licença do cliente no formato DD/MM/YYYYY: ");
-                LocalDate dataLicenca = LocalDate.parse(scan.nextLine(), dtf);
-                System.out.println("Digite o grau de educação do cliente: ");
-                String educacao = scan.nextLine();
-                System.out.println("Digite o gênero do cliente: ");
-                String genero = scan.nextLine();
-                System.out.println("Digite a classe econômica do cliente: ");
-                String classeEconomica = scan.nextLine();
-                System.out.println("Digite a data de nascimento do cliente no formato DD/MM/YYYYY: ");
-                LocalDate dataNascimento = LocalDate.parse(scan.nextLine(), dtf);
-                
-                ClientePF novoCliente = new ClientePF(nome,
-                                                endereco, 
-                                                dataLicenca,
-                                                educacao,
-                                                genero,
-                                                classeEconomica,
-                                                new ArrayList<Veiculo>(),
-                                                cpf,
-                                                dataNascimento,
-                                                0);
-                double seguro = seguradoraDesejada.calcularPrecoSeguroCliente(novoCliente);
-                novoCliente.setValorSeguro(seguro);
-                boolean temp = seguradoraDesejada.cadastrarCliente(novoCliente);
-            }
-        }
-    }
-
-    /*
-     * Método usado no menu interativo para perguntar ao
-     * usuário todas as informações necessárias de um cliente
-     * jurídico para cadastrá-lo
-     */
-    public static void cadastrarClientePJ(Seguradora seguradoraDesejada) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        System.out.println("Digite o nome do cliente: ");
-        String nome = scan.nextLine();
-        System.out.println("Digite o CNPJ do cliente: ");
-        String cnpj = scan.nextLine();
-        if (!Validacao.validarCNPJ(cnpj)) {
-            System.out.println("Por favor verifique os dígitos inseridos e tente novamente.");
-        } else {
-            System.out.println("Digite o endereço do cliente: ");
-            String endereco = scan.nextLine();
-            System.out.println("Digite a data de fundação do cliente no formato DD/MM/YYYYY: ");
-            LocalDate dataFundacao = LocalDate.parse(scan.nextLine(), dtf);
-            System.out.println("Digite o número de funcionários do cliente: ");
-            int quantidadeFuncionarios = scan.nextInt();
-            scan.nextLine();
-            ClientePJ novoCliente = new ClientePJ(nome,
-                                                endereco,
-                                                new ArrayList<Veiculo>(),
-                                                cnpj,
-                                                dataFundacao,
-                                                0,
-                                                quantidadeFuncionarios);
-            double seguro = seguradoraDesejada.calcularPrecoSeguroCliente(novoCliente);
-            novoCliente.setValorSeguro(seguro);
-    
-            boolean temp = seguradoraDesejada.cadastrarCliente(novoCliente);
-        }
-
-    }
-
 
     /*
      * Assim como o cadastrar clientepf e cliente pj,
@@ -294,9 +207,9 @@ public class AppMain {
                                 entradaTemp = scan.nextInt();
                                 scan.nextLine();
                                 if (entradaTemp == 1) {
-                                    cadastrarClientePF(seguradoraCliente);
+                                    seguradoraCliente.cadastrarCliente("pf");
                                 } else if (entradaTemp == 2) {
-                                    cadastrarClientePJ(seguradoraCliente);
+                                    seguradoraCliente.cadastrarCliente("pj");
                                 } else {
                                     System.out.println("Por favor tente novamente.");
                                 }
@@ -309,7 +222,12 @@ public class AppMain {
                                 Seguradora seguradoraVeiculo = listaSeguradoras.get(i);
                                 int indiceCliente = listaSeguradoras.get(i).escolheCliente();
                                 if (indiceCliente >= 0) {
-                                    cadastrarVeiculo(seguradoraVeiculo, indiceCliente);
+                                    if (listaSeguradoras.get(i).getListaClientes().get(indiceCliente) instanceof ClientePF) {
+                                        ((ClientePF) listaSeguradoras.get(i).getListaClientes().get(indiceCliente)).cadastrarVeiculo();
+                                    } else {
+                                        int indiceFrota = ((ClientePJ) listaSeguradoras.get(i).getListaClientes().get(indiceCliente)).escolheFrota();
+                                        ((ClientePJ) listaSeguradoras.get(i).getListaClientes().get(indiceCliente)).getListaFrotas().get(indiceFrota).addVeiculo();
+                                    }
                                 }
                             }
                             break;
@@ -485,63 +403,182 @@ public class AppMain {
     }
 
     public static void main(String[] args) {
-        Seguradora seguradora = new Seguradora("Seguradora POO", 
+        //INSTANCIAÇÃO DAS SEGURADORAS, CLIENTE E VEÍCULOS
+        Seguradora seguradora1 = new Seguradora("Seguradora POO", 
                                             "11995807321",
                                             "email.seguradora@gmail.com",
                                             "Rua da Seguradora 101",
-                                            new ArrayList<Sinistro>(),
-                                            new ArrayList<Cliente>());
+                                            new ArrayList<Cliente>(),
+                                            new ArrayList<Seguro>(),
+                                            "77.693.689/0001-01");
+
+        Seguradora seguradora2 = new Seguradora("Seguradora do IC",
+                                                "19123456789",
+                                                "seguradora@ic.com.br",
+                                                "Avenida Albert Einstein 100",
+                                                new ArrayList<Cliente>(),
+                                                new ArrayList<Seguro>(),
+                                                "45.380.783/0001-14");
 
         LocalDate dataLicenca = LocalDate.now();
         LocalDate dataNascimento = LocalDate.of(2004, 04, 19);
         LocalDate dataFundacao = LocalDate.of(1994, 07, 5);
 
-        ClientePF cliente1 = new ClientePF("Pedro da Rosa",
+        ClientePF clientePF1 = new ClientePF("Pedro da Rosa",
                                             "Rua Pascal 99",
-                                            dataLicenca,
+                                            "11995807321",
+                                            "pedro@gmail.com",
                                             "Ensino Médio Completo",
                                             "Masculino",
-                                            "Média",
                                             new ArrayList<Veiculo>(),
                                             "449.219.868-78", 
-                                            dataNascimento,
-                                            0);
+                                            LocalDate.of(2004, 04, 19));
 
-        ClientePJ cliente2 = new ClientePJ("Amazon",
-                                            "Rua da Amazon",
+        ClientePF clientePF2 = new ClientePF("Lucas da Rosa Pinheiro",
+                                            "Avenida Doutor Romeu Tórtima 909",
+                                            "11995804321",
+                                            "lucas@gmail.com",
+                                            "Ensino Superior Completo",
+                                            "Masculino",
                                             new ArrayList<Veiculo>(),
-                                            "15.436.940/0001-03",
-                                            dataFundacao,
-                                            0, 
-                                            10000);
+                                            "562.297.046.68",
+                                            LocalDate.of(1995, 11, 03));
 
-        Veiculo veiculoCliente1 = new Veiculo("DDD2311",
+        ClientePJ clientePJ1 = new ClientePJ("Apple",
+                                            "Rua da Apple",
+                                            "08007610867",
+                                            "apple@gmail.com",
+                                            10000,
+                                            "00.623.904/0001-73",
+                                            LocalDate.of(1976, 04, 01),
+                                            new ArrayList<Frota>());
+
+        ClientePJ clientePJ2 = new ClientePJ("Amazon",
+                                            "Rua da Amazon",
+                                            "08000380541",
+                                            "amazon@gmail.com",
+                                            25000,
+                                            "15.436.940/0001-03",
+                                            LocalDate.of(1994, 07, 5),
+                                            new ArrayList<Frota>());
+
+        Veiculo veiculoClientePF1 = new Veiculo("DDD2311",
                                             "Hyundai",
                                             "Civic",
                                             2020);
 
-        Veiculo veiculoCliente2 = new Veiculo("ECP21234",
+        Veiculo veiculoClientePF2 = new Veiculo("ECP21234",
                                             "Volkwswagen",
                                             "Nivus",
                                             2022);
 
-        listaSeguradoras.add(seguradora);
-        listaSeguradoras.get(0).getListaClientes().add(cliente1);
-        listaSeguradoras.get(0).getListaClientes().add(cliente2);
-        listaSeguradoras.get(0).getListaClientes().get(0).getListaVeiculos().add(veiculoCliente1);
-        listaSeguradoras.get(0).getListaClientes().get(0).getListaVeiculos().add(veiculoCliente2);
-        listaSeguradoras.get(0).gerarSinistro(veiculoCliente1, cliente1);
-        listaSeguradoras.get(0).gerarSinistro(veiculoCliente2, cliente2);
+        Veiculo veiculoClientePJ1 = new Veiculo ("ABC0000",
+                                                "Toyota",
+                                                "Supra",
+                                                1998);
 
+        Veiculo veiculoClientePJ2 = new Veiculo("GNG8764",
+                                                "Subaru",
+                                                "WRX",
+                                                1995);
+
+        //ADICIONANDO AS SEGURAODAS E CLIENTES À LISTA DE SEGURADORAS
+            //duas seguradoras, cada uma com um cliente físico e um jurídico
+        listaSeguradoras.add(seguradora1);
+        listaSeguradoras.get(0).getListaClientes().add(clientePF1);
+        listaSeguradoras.get(0).getListaClientes().add(clientePJ1);
+        listaSeguradoras.add(seguradora2);
+        listaSeguradoras.get(1).getListaClientes().add(clientePF2);
+        listaSeguradoras.get(1).getListaClientes().add(clientePJ2);
+
+        //GERANDO SEGUROS
+        listaSeguradoras.get(0).gerarSeguro();
+        listaSeguradoras.get(1).gerarSeguro();
+
+        //GERANDO SINISTROS
+        listaSeguradoras.get(0).getListaSeguros().get(0).gerarSinistro();
+        listaSeguradoras.get(1).getListaSeguros().get(0).gerarSinistro();
+
+        //GERANDO CONDUTORES
+        Condutor condutorSeguradora1 = new Condutor("449.219.868-78",
+                                                    "Pedro",
+                                                    "11995807321",
+                                                    "Rua Endereço",
+                                                    "condutor@gmail.com",
+                                                    LocalDate.of(2004, 04, 19),
+                                                    new ArrayList<Sinistro>());
+
+        Condutor condutorSeguradora2 = new Condutor("019.445.860-16",
+                                                    "André Santos",
+                                                    "62996978007",
+                                                    "Rua da Casa do André",
+                                                    "pixandre10@gmail.com",
+                                                    LocalDate.of(2003, 11, 03),
+                                                    new ArrayList<Sinistro>());
+
+        listaSeguradoras.get(0).getListaSeguros().get(0).getListaCondutores().add(condutorSeguradora1);
+        listaSeguradoras.get(1).getListaSeguros().get(0).getListaCondutores().add(condutorSeguradora2);
+
+        //CRIANDO FROTA
+        ((ClientePJ) listaSeguradoras.get(0).getListaClientes().get(1)).cadastrarFrota();
+        ((ClientePJ) listaSeguradoras.get(1).getListaClientes().get(1)).cadastrarFrota();
+
+
+        //ADICIONANDO OS VEÍCULOS AOS CLIENTES FÍSICOS
+        ((ClientePF) listaSeguradoras.get(0).getListaClientes().get(0)).getListaVeiculos().add(veiculoClientePF1);
+        ((ClientePF) listaSeguradoras.get(1).getListaClientes().get(0)).getListaVeiculos().add(veiculoClientePF2);
+
+
+        //ADICIONANDO OS VEÍCULOS ÀS FROTAS
+        ((ClientePJ) listaSeguradoras.get(0).getListaClientes().get(1)).getListaFrotas().get(0).getListaVeiculos().add(veiculoClientePJ1);
+        ((ClientePJ) listaSeguradoras.get(1).getListaClientes().get(1)).getListaFrotas().get(0).getListaVeiculos().add(veiculoClientePJ2);
+
+
+        //TO STRING DE CADA CLASSE
+        System.out.println("TO STRING DA SEGURADORA");
+        System.out.println(seguradora1);
+        System.out.println("TO STRING DO CLIENTE FÍSICO");
+        System.out.println(clientePF1);
+        System.out.println("TO STRING DO CLIENTE JURÍDICO");
+        System.out.println(clientePF2);
+        System.out.println("TO STRING DO CONDUTOR");
+        System.out.println(condutorSeguradora1);
+        System.out.println("TO STRING DA FROTA");
+        System.out.println(((ClientePJ) listaSeguradoras.get(0).getListaClientes().get(1)).getListaFrotas().get(0));
+        System.out.println("TO STRING DO SEGURO FÍSICO");
+        System.out.println(listaSeguradoras.get(0).getListaSeguros().get(0));
+        System.out.println("TO STRING DO SEGURO JUŔIDICO");
+        System.out.println(listaSeguradoras.get(0).getListaSeguros().get(1));
+        System.out.println("TO STRING DO SINISTRO");
+        System.out.println(listaSeguradoras.get(0).getListaSeguros().get(0).getListaSinistros().get(0));
+        System.out.println("TO STRING DO VEÍCULO");
+        System.out.println(veiculoClientePF1);
+
+        //PRINCIPAIS MÉTODOS DA SEGURADORA
+        
+            //gerarSeguro já foi utilizado
+        
+            //cadastrarCliente já foi utilizado
+        listaSeguradoras.get(0).cadastrarCliente("pf");
+
+            //listarClientes
         listaSeguradoras.get(0).listarClientes("pf");
-        listaSeguradoras.get(0).visualizarSinistro("Amazon");
-        listaSeguradoras.get(0).listarSinistros();
-        listaSeguradoras.get(0).calcularReceita();
 
-        listaSeguradoras.get(0).calcularPrecoSeguroCliente(cliente1);
-        listaSeguradoras.get(0).calcularPrecoSeguroCliente(cliente2);
+            //cancelarSeguro
+        listaSeguradoras.get(0).cancelarSeguro();
 
+            //removerCliente
+        listaSeguradoras.get(0).removerCliente();
+
+            //getSegurosPorCliente
+        ArrayList<Seguro> listaSegurosTemp = listaSeguradoras.get(0).getSegurosPorCliente(clientePF1);
+
+            //getSinistrosPorCliente
+        ArrayList<Sinistro> listaSinistrosTemp = listaSeguradoras.get(0).getSinistrosPorCliente(clientePF1);
+
+            // calcularReceita
         System.out.println(listaSeguradoras.get(0).calcularReceita());
+
 
         menuInterativo();
     }
