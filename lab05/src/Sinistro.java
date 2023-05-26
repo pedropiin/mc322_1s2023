@@ -55,7 +55,7 @@ public class Sinistro {
 	}
 
 	public void setCondutor(Condutor novoCondutor) {
-		this.condutor = condutor;
+		this.condutor = novoCondutor;
 	}
 
 	public Seguro getSeguro() {

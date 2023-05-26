@@ -14,7 +14,6 @@ public class Frota {
 
     public String toString() {
         String all = "Code: " + getCode();
-
         return all;
     }
 

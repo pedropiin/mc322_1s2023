@@ -46,10 +46,6 @@ public class SeguroPF extends Seguro {
 
     //INÍCIO DOS MÉTODOS NÃO PADRÕES
 
-    public boolean autorizarCondutor() {
-
-    }
-
     public double calcularValor() {
         int idadeCliente = Period.between(this.cliente.getDataNascimento(), LocalDate.now()).getYears();
         int quantidadeVeiculos = cliente.getListaVeiculos().size();
@@ -67,14 +63,6 @@ public class SeguroPF extends Seguro {
                 (5 + quantidadeSinistrosCondutor / 10);
 
         return valor;
-    }
-
-    public boolean desautorizarCondutor() {
-
-    }
-
-    public void gerarSinistro() {
-
     }
 
     public double getFatorIdade(int idadeCliente) {

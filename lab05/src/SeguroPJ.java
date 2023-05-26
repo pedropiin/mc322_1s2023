@@ -42,18 +42,6 @@ public class SeguroPJ extends Seguro {
 
     //INÍCIO DOS MÉTODOS NÃO PADRÕES
 
-    public boolean autorizarCondutor() {
-
-    }
-
-    public boolean desautorizarCondutor() {
-
-    }
-
-    public void gerarSinistro() {
-
-    }
-
     public double calcularValor() {
         int quantidadeFuncionarios = cliente.getQuantidadeFuncs();
         int quantidadeVeiculos = 0;

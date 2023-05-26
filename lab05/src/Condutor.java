@@ -1,7 +1,9 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Condutor {
+    Scanner scan = new Scanner(System.in);
     private final String cpf;
     private String nome;
     private String telefone;
@@ -9,6 +11,7 @@ public class Condutor {
     private String email;
     private LocalDate dataNascimento;
     private ArrayList<Sinistro> listaSinistros;
+    private boolean autorizado;
 
     public Condutor(String cpf,
                     String nome,
@@ -24,6 +27,7 @@ public class Condutor {
         this.email = email;
         this.dataNascimento = dataNascimento;
         this.listaSinistros = listaSinistros;
+        this.autorizado = true;
     }
 
     public String toString() {
@@ -85,9 +89,18 @@ public class Condutor {
         return this.listaSinistros;
     }
 
+    public boolean getAutorizacao() {
+        return this.autorizado;
+    }
+
+    public void setAutorizacao(boolean autorizacao) {
+        this.autorizado = autorizacao;
+    }
+
     //INÍCIO DOS MÉTODOS NÃO PADRÕES 
 
-    public void adicionarSinistro() {
-        
+    public void adicionarSinistro(Sinistro novoSinistro) {
+        getListaSinistros().add(novoSinistro);
+        System.out.println("O sinistro foi adicionado com sucesso.");
     }
 }

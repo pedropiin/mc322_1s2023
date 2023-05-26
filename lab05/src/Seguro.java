@@ -1,8 +1,10 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 public abstract class Seguro {
+    Scanner scan = new Scanner(System.in);
     private final int id;
     private int valorMensal;
     private LocalDate dataInicio;
@@ -80,6 +82,42 @@ public abstract class Seguro {
 
     //INÍCIO DOS MÉTODOS NÃO PADRÕES
 
+    public boolean autorizarCondutor() {
+        int indiceCondutor = escolheCondutor();
+        if (indiceCondutor >= 0) {
+            getListaCondutores().get(indiceCondutor).setAutorizacao(true);
+            return true;
+        }
+        return false;
+    }
+
+    public abstract double calcularValor();
+
+    public boolean desautorizarCondutor() {
+        int indiceCondutor = escolheCondutor();
+        if (indiceCondutor >= 0) {
+            getListaCondutores().get(indiceCondutor).setAutorizacao(false);
+            return true;
+        }
+        return false;
+    }
+
+    public int escolheCondutor() {
+        int entrada;
+        if (getListaCondutores().size() == 0) {
+            System.out.println("Não há nenhum condutor cadastrado no seguro em questão.");
+            return -1;
+        } else {
+            System.out.println("Selecione o condutor desejado.");
+            for (int i = 0; i < getListaCondutores().size(); i++) {
+                System.out.println("(" + i + ") - " + getListaCondutores().get(i).getNome());
+            }
+            entrada = scan.nextInt();
+            scan.nextLine();
+            return entrada;
+        }
+    }
+
     /*
      * Método que gera um id aleatório para cada objeto
      * da classe
@@ -90,11 +128,12 @@ public abstract class Seguro {
         return rand.nextInt(limite);
     }
 
-    public abstract void autorizarCondutor();
-
-    public abstract void desautorizarCondutor();
-
-    public abstract double calcularValor();
-
-    public abstract void gerarSinistro();
+    public void gerarSinistro() {
+        int indiceCondutor = escolheCondutor();
+        String endereco;
+        System.out.println("Por favor digite o endereço do acidente.");
+        endereco = scan.nextLine();
+        Sinistro novoSinistro = new Sinistro(LocalDate.now(), endereco, getListaCondutores().get(indiceCondutor), this);
+        listaSinistros.add(novoSinistro);
+    }
 }

@@ -91,7 +91,7 @@ public class ClientePJ extends Cliente {
 
     public boolean cadastrarFrota() {
         Frota novaFrota = new Frota(new ArrayList<Veiculo>());
-        getlistaFrotas().add(novaFrota);
+        listaFrotas.add(novaFrota);
         System.out.println("Uma nova frota (código: " + novaFrota.getCode() + ") foi cadastrada com sucesso");
         return true;
     }
@@ -109,11 +109,11 @@ public class ClientePJ extends Cliente {
 	}
 
     public boolean getVeiculosPorFrota() {
-        if (getlistaFrotas().size() == 0) {
+        if (listaFrotas.size() == 0) {
             System.out.println("O cliente " + getNome() + " não possui nenhuma frota cadastrada.");
             return false;
         } else {
-            for (Frota frota : getlistaFrotas()) {
+            for (Frota frota : listaFrotas) {
                 System.out.println("---Veículos da frota de código " + frota.getCode() + "---");
                 for (Veiculo veiculo : frota.getListaVeiculos()) {
                     System.out.println(veiculo.getMarca() + " " + veiculo.getModelo() + " " + veiculo.getPlaca());
