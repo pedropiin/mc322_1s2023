@@ -109,8 +109,10 @@ public class AppMain {
         String email = scan.nextLine();
         System.out.println("Digite o endereço da nova seguradora: ");
         String endereco = scan.nextLine();
+        System.out.println("Digite o CNPJ da nova seguradora: ");
+        String cnpj = scan.nextLine();
 
-        Seguradora novaSeguradora = new Seguradora(nome, telefone, email, endereco, new ArrayList<Sinistro>(), new ArrayList<Cliente>());
+        Seguradora novaSeguradora = new Seguradora(nome, telefone, email, endereco, new ArrayList<Cliente>(), new ArrayList<Seguro>(), cnpj);
         listaSeguradoras.add(novaSeguradora);
     }
 
@@ -120,23 +122,15 @@ public class AppMain {
      * base no nome do dono de um veículo e sua seguradora, 
      * remove o veículo desejado 
      */
-    public static boolean removerVeiculo(String nomeDonoVeiculo, Seguradora seguradoraCliente) {
-        ArrayList<Cliente> listaClientesTemp = seguradoraCliente.getListaClientes();
-        for (int i = 0; i < listaClientesTemp.size(); i++) {
-            if (listaClientesTemp.get(i).getNome() == nomeDonoVeiculo) {
-                ArrayList<Veiculo> listaVeiculosTemp = listaClientesTemp.get(i).getListaVeiculos();
-                System.out.println("Digite o índice associado ao veículo que se deseja excluir.");
-                for (int j = 0; j < listaVeiculosTemp.size(); j++) {
-                    System.out.println("(" + i + ") - " + listaVeiculosTemp.get(j).getMarca() + listaVeiculosTemp.get(j).getModelo() + listaVeiculosTemp.get(j).getPlaca());
-                }
-                int indiceVeiculo = scan.nextInt();
-                scan.nextLine();
-                seguradoraCliente.getListaClientes().get(i).getListaVeiculos().remove(indiceVeiculo);
-                return true;
-            }
+    public static boolean removerVeiculo(Seguradora seguradoraCliente) {
+        int indiceVeiculo, indiceFrota, indiceCliente = seguradoraCliente.escolheCliente();
+        if (seguradoraCliente.getListaClientes().get(indiceCliente) instanceof ClientePF) {
+            seguradoraCliente.getListaClientes().get(indiceCliente).removeVeiculo();
+        } else {
+            indiceFrota = seguradoraCliente.getListaClientes().get(indiceCliente).escolheFrota();
+            seguradoraCliente.getListaClientes().get(indiceCliente).getListaFrotas().get(indiceFrota).removeVeiculo;
         }
-        System.out.println("Não há um cliente nesta segurado com o nome inserido. Favor tentar novamente.");
-        return false;
+        return true;
     }
     
     /*
@@ -144,17 +138,24 @@ public class AppMain {
      * base no nome do cliente associado ao sinistro
      * e sua seguradora, remove um sinistro dele
      */
-    public static void removerSinistro(String nomeClienteSinistro, Seguradora seguradoraCliente) {
-        ArrayList<Sinistro> listaSinistroTemp = seguradoraCliente.getListaSinistros();
-        System.out.println("Digite o índice associado ao sinistro que se deseja excluir.");
-        for (int i = 0; i < listaSinistroTemp.size(); i++) {
-            if (listaSinistroTemp.get(i).getCliente().getNome() == nomeClienteSinistro) {
-                System.out.println("( " + i + ") - " + "ID: " + listaSinistroTemp.get(i).getId() + " / Placa do veículo: " + listaSinistroTemp.get(i).getVeiculo().getPlaca());
+    public static void removerSinistro(Seguradora seguradoraCliente) {
+        System.out.println("Digite o nome do condutor associado ao sinistro que será removido.");
+        String nomeCondutor = scan.nextLine();
+        int indiceRemoverSinistro = -1;
+        for (Seguro seguro : seguradoraCliente.getListaSeguros()) {
+            for (int i = 0; i < seguro.getListaSinistros().size(); i++) {
+                if (seguro.getListaSinistros().get(i).getCondutor().getNome() == nomeCondutor) {
+                    indiceRemoverSinistro = i;
+                    break;
+                }
+            }
+            if (indiceRemoverSinistro == -1) {
+                System.out.println("Nenhum sinistro foi encontrado associado ao condutor inserido. Por favor tente novamente.");
+            } else {
+                seguro.getListaSinistros().remove(indiceRemoverSinistro);
+                System.out.println("O sinistro foi removido com sucesso.");
             }
         }
-        int indiceSinistro = scan.nextInt();
-        scan.nextLine();
-        seguradoraCliente.getListaSinistros().remove(indiceSinistro);
     }
 
 
@@ -287,33 +288,46 @@ public class AppMain {
                                 listaClientesTemp = listaSeguradoras.get(i).getListaClientes();
                                 for (j = 0; j < listaClientesTemp.size(); j++) {
                                     System.out.println("--- Sinistros do cliente " + listaClientesTemp.get(j).getNome() + "---");
-                                    listaSeguradoras.get(i).visualizarSinistro(listaClientesTemp.get(j).getNome());
+                                    listaSeguradoras.get(i).visualizarSinistro(listaClientesTemp.get(j));
                                 }
                             }
                             break;
 
                         case LISTAR_VEICULOS_POR_CLIENTE:
                             ArrayList<Veiculo> listaVeiculoTemp;
-                            for (i = 0; i < listaSeguradoras.size(); i++) {
-                                listaClientesTemp = listaSeguradoras.get(i).getListaClientes();
+                            for (Seguradora seguradora : listaSeguradoras) {
+                                listaClientesTemp = seguradora.getListaClientes();
                                 for (j = 0; j < listaClientesTemp.size(); j++) {
-                                    listaVeiculoTemp = listaClientesTemp.get(j).getListaVeiculos();
-                                    System.out.println("--- Veículos do cliente " + listaClientesTemp.get(j).getNome() + "---");
-                                    for (h = 0; h < listaVeiculoTemp.size(); h++) {
-                                        System.out.println(listaVeiculoTemp.get(h));
+                                    if (listaClientesTemp.get(j) instanceof ClientePF) {
+                                        listaVeiculoTemp = listaClientesTemp.get(j).getListaVeiculos();
+                                        System.out.println("--- Veículos do cliente " + listaClientesTemp.get(j).getNome() + " ---");
+                                        for (Veiculo veiculo : listaVeiculosTemp) {
+                                            System.out.println(veiculo);
+                                        }
+                                    } else {
+                                        for (Frota frota : listaClientesTemp.get(j).getListaFrotas()) {
+                                            frota.getVeiculosPorFrota();
+                                        }
                                     }
                                 }
                             }
                             break;
 
                         case LISTAR_VEICULOS_POR_SEGURADORA:
-                            for (i = 0; i < listaSeguradoras.size(); i++) {
-                                listaClientesTemp = listaSeguradoras.get(i).getListaClientes();
+                            for (Seguradora seguradora : listaSeguradoras) {
+                                listaClientesTemp = seguradora.getListaClientes();
                                 System.out.println("--- Veículos da seguradora " + listaSeguradoras.get(i).getNome());
                                 for (j = 0; j < listaClientesTemp.size(); j++) {
-                                    listaVeiculoTemp = listaClientesTemp.get(j).getListaVeiculos();
-                                    for (h = 0; h < listaVeiculoTemp.size(); h++) {
-                                        System.out.println(listaVeiculoTemp.get(h));
+                                    if (listaCLientesTemp.get(j) instanceof Cliente PF) {
+                                        for (Veiculo veiculo : listaClientesTemp.get(j).getListaVeiculos()) {
+                                            System.out.println(veiculo);
+                                        }
+                                    } else {
+                                        for (Frota frota : listaClientesTemp.getListaFrotas()) {
+                                            for (Veiculo veiculo : frota.getListaVeiculos()) {
+                                                System.out.println(veiculo);
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -338,20 +352,17 @@ public class AppMain {
                     switch (comandoSecundario) {
                         case EXCLUIR_CLIENTE:
                             i = escolheSeguradora();
-                            System.out.println("Digite o nome do cliente que se deseja excluir: ");
-                            boolean temp = listaSeguradoras.get(i).removerCliente(scan.nextLine());
+                            listaSeguradoras.get(i).removerCliente();
                             break;
 
                         case EXCLUIR_VEICULO:
                             i = escolheSeguradora();
-                            System.out.println("Digite o nome do cliente que terá o veículo removido: ");
-                            temp = removerVeiculo(scan.nextLine(), listaSeguradoras.get(i));
+                            removerVeiculo(listaSeguradoras.get(i));
                             break;
                             
                         case EXCLUIR_SINISTRO:
                             i = escolheSeguradora();
-                            System.out.println("Digite o nome do cliente que terá o sinistro removido: ");
-                            removerSinistro(scan.nextLine(), listaSeguradoras.get(i));
+                            removerSinistro(listaSeguradoras.get(i));
                             break;
 
                         case VOLTAR_EXCLUIR:

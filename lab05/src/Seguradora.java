@@ -320,7 +320,16 @@ public class Seguradora {
 	 * e passa pela listaSinistros. Assim, printa todo sinistro 
 	 * que encontrar associado ao nome do cliente em questão.
 	 */
-	public boolean visualizarSinistro(String cliente) {
+	public boolean visualizarSinistro(Cliente cliente) {
+		for (Seguro seguro : getListaSeguros()) {
+			if (seguro.getCliente() == cliente) {
+				for (Sinistro sinistro : seguro.getListaSinistros()) {
+					System.out.println(sinistro);
+				}
+			}
+		}
+
+
 		if (listaSinistros.size() == 0) {
 			System.out.println("Não há sinistros registrados no nome desse cliente.");
 			return false;

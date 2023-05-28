@@ -138,27 +138,12 @@ public class ClientePF extends Cliente {
     }
 
     public boolean removerVeiculo() {
-        if (getListaVeiculos().size() == 0) {
-            System.out.println("O cliente " + getNome() + " não possui nenhum veículo cadastrado.");
-            return false;
-        } else {
-            Veiculo veiculoIteracao;
-            System.out.println("Digite o número relacionado ao veículo desejado.");
-            for (int i = 0; i < listaVeiculos.size(); i++) {
-                veiculoIteracao = listaVeiculos.get(i);
-                System.out.println("(" + i + ") - " + veiculoIteracao.getMarca() + " " + veiculoIteracao.getModelo()
-                        + " " + veiculoIteracao.getPlaca());
-            }
-            int entrada = scan.nextInt();
-            scan.nextLine();
-            if (entrada < 0 || entrada > listaVeiculos.size() - 1) {
-                System.out.println("Por favor tente novamente, digitando um número válido.");
-                return false;
-            } else {
-                listaVeiculos.remove(entrada);
-                System.out.println("Veículo removido com sucesso");
-                return true;
-            }
+        int indiceVeiculo = escolheVeiculo();
+        if (indiceVeiculo >= 0) {
+            getListaVeiculos().remove(indiceVeiculo);
+            System.out.println("Veículo removido com sucesso.");
+            return true;
         }
+        return false;
     }
 }
