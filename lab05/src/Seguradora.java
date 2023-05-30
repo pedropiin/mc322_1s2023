@@ -144,7 +144,7 @@ public class Seguradora {
 				int quantidadeFuncionarios = scan.nextInt();
 				scan.nextLine();
 
-				ClientePJ novoCliente = new ClientePJ(nome, endereco, telefone, email, quantidadeFuncionarios, cnpj, dataFundacao, new ArrayList<Frota>())
+				ClientePJ novoCliente = new ClientePJ(nome, endereco, telefone, email, quantidadeFuncionarios, cnpj, dataFundacao, new ArrayList<Frota>());
 				getListaClientes().add(novoCliente);
 				return true;
 			}
@@ -194,12 +194,28 @@ public class Seguradora {
 			System.out.println("A seguradora escolhida ainda não possui nenhum cliente cadastrado. Por favor tente novamente.");
 			return -1;
 		} else {
-			System.out.println("Digite o número relacionado ao cliente desejado.");
+			System.out.println("Selecione cliente desejado.");
 			for (int i = 0; i < getListaClientes().size(); i++) {
 				System.out.println("(" + i + ") - " + getListaClientes().get(i).getNome());
 			}
 			int indiceClienteEscolhido = scan.nextInt();
+			scan.nextLine();
 			return indiceClienteEscolhido;
+		}
+	}
+
+	public int escolheSeguro() {
+		if (getListaSeguros().size() == 0) {
+			System.out.println("A seguradora escolhida não possui nenhum seguro cadastrado.");
+			return -1;
+		} else {
+			System.out.println("Selecione o seguro desejado.");
+			for (int i = 0; i < getListaSeguros().size(); i++) {
+				System.out.println("(" + i  + ") - Código: " + getListaSeguros().get(i).getId() + " / Cliente: " + getListaSeguros().get(i).getCliente().getNome());
+			}
+			int indiceSeguroEscolhido = scan.nextInt();
+			scan.nextLine();
+			return indiceSeguroEscolhido;
 		}
 	}
 
@@ -328,26 +344,7 @@ public class Seguradora {
 				}
 			}
 		}
-
-
-		if (listaSinistros.size() == 0) {
-			System.out.println("Não há sinistros registrados no nome desse cliente.");
-			return false;
-		} else {
-			int numSinistrosCliente = 0;
-			for (Sinistro elementSin : listaSinistros) {
-				if (elementSin.cliente.getNome() == cliente) {
-					System.out.println(elementSin);
-					numSinistrosCliente++;
-				}
-			}
-			if (numSinistrosCliente > 0) {
-				return true;
-			} else {
-				System.out.println("O cliente não possui sinistros.");
-				return false;
-			}
-		}
+		return true;
 	}
 
 
@@ -358,22 +355,26 @@ public class Seguradora {
 	 * recalcula o preço do seguro de ambos.
 	 */
 	public void transferirSeguro() {
-		System.out.println("Primeiramente necessitamos do cliente cujo seguro deverá partir de.");
+		System.out.println("Primeiramente, selecione o cliente cujo seguro deverá partir de.");
 		int indiceClienteOriginal = escolheCliente();
 		if (indiceClienteOriginal >= 0) {
 			System.out.println("Por fim, o cliente para qual o seguro será transferido");
 			int indiceClienteRecebido = escolheCliente();
 			if (indiceClienteRecebido >= 0) {
-				for (int i = 0; i < getListaClientes().get(indiceClienteOriginal).getListaVeiculos().size(); i++) {
-					getListaClientes().get(indiceClienteRecebido).getListaVeiculos().add(getListaClientes().get(indiceClienteOriginal).getListaVeiculos().get(i));
-					getListaClientes().get(indiceClienteOriginal).getListaVeiculos().remove(0);
+				if (getListaClientes().get(indiceClienteOriginal) instanceof ClientePF && getListaClientes().get(indiceClienteRecebido) instanceof ClientePF) {
+					for (int i = 0; i < ((ClientePF) getListaClientes().get(indiceClienteOriginal)).getListaVeiculos().size(); i++) {
+						((ClientePF) getListaClientes().get(indiceClienteRecebido)).getListaVeiculos().add(((ClientePF) getListaClientes().get(indiceClienteOriginal)).getListaVeiculos().get(0));
+						((ClientePF) getListaClientes().get(indiceClienteOriginal)).getListaVeiculos().remove(0);
+					}
+				} else if (getListaClientes().get(indiceClienteOriginal) instanceof ClientePJ && getListaClientes().get(indiceClienteRecebido) instanceof ClientePF) {
+					for (int i = 0; i < ((ClientePJ) getListaClientes().get(indiceClienteOriginal)).getListaFrotas().size(); i++) {
+						((ClientePJ) getListaClientes().get(indiceClienteRecebido)).getListaFrotas().add(((ClientePJ) getListaClientes().get(indiceClienteOriginal)).getListaFrotas().get(0));
+						((ClientePJ) getListaClientes().get(indiceClienteOriginal)).getListaFrotas().remove(0);
+					}
+				} else {
+					System.out.println("Os clientes selecionados são de categorias diferentes. Por favor tente novamente.");
 				}
-				double novoPrecoOriginal = calcularPrecoSeguroCliente(getListaClientes().get(indiceClienteOriginal));
-				double novoPrecoRecebido = calcularPrecoSeguroCliente(getListaClientes().get(indiceClienteRecebido));
-				getListaClientes().get(indiceClienteOriginal).setValorSeguro(novoPrecoOriginal);
-				getListaClientes().get(indiceClienteRecebido).setValorSeguro(novoPrecoRecebido);
 			}
 		}
 	}
-
 }

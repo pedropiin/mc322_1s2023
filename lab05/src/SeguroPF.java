@@ -74,6 +74,4 @@ public class SeguroPF extends Seguro {
             return CalcSeguro.FATOR_60_90.getValor();
         }
     }
-
-
 }

@@ -49,23 +49,44 @@ public class AppMain {
      * faz com que o usuário escolha um veículo de um específico
      * cliente, retornando seu índice
      */
-    public static int escolheVeiculo(Seguradora seguradoraCliente, int indiceCliente) {
-        ArrayList<Veiculo> listaVeiculosTemp = seguradoraCliente.getListaClientes().get(indiceCliente).getListaVeiculos();
-        int tamanhoListaVeiculos = listaVeiculosTemp.size();
-        if (tamanhoListaVeiculos == 0) {
-            System.out.println("O cliente escolhido ainda não possui nenhum veículo cadastrado.");
-            return -1;
-        } else {
-            System.out.println("Digite o índice do veículo em questão.");
-            for (int i = 0; i < tamanhoListaVeiculos; i++) {
-                System.out.println("(" + i + ") - " +
-                                    listaVeiculosTemp.get(i).getMarca() + 
-                                    listaVeiculosTemp.get(i).getModelo() + 
+    public static int escolheVeiculo(Seguradora seguradoraCliente, Cliente cliente) {
+        if (cliente instanceof ClientePF) {
+            ArrayList<Veiculo> listaVeiculosTemp = ((ClientePF) cliente).getListaVeiculos();
+            int tamanhoListaVeiculos = listaVeiculosTemp.size();
+            if (tamanhoListaVeiculos == 0) {
+                System.out.println("O cliente escolhido ainda não possui nenhum veículo cadastrado.");
+                return -1;
+            } else {
+                System.out.println("Digite o índice do veículo em questão.");
+                for (int i = 0; i < tamanhoListaVeiculos; i++) {
+                    System.out.println("(" + i + ") - " +
+                                    listaVeiculosTemp.get(i).getMarca() +
+                                    listaVeiculosTemp.get(i).getModelo() +
                                     listaVeiculosTemp.get(i).getPlaca());
+                }
+                int indiceVeiculo = scan.nextInt();
+                scan.nextLine();
+                return indiceVeiculo;
             }
-            int indiceVeiculo = scan.nextInt();
-            scan.nextLine();
-            return indiceVeiculo;
+        } else {
+            int indiceFrota = ((ClientePJ) cliente).escolheFrota();
+            ArrayList<Veiculo> listaVeiculosTemp = ((ClientePJ) cliente).getListaFrotas().get(indiceFrota).getListaVeiculos();
+            int tamanhoListaVeiculos = listaVeiculosTemp.size();
+            if (tamanhoListaVeiculos == 0) {
+                System.out.println("O cliente escolhido ainda não possui nenhum veículo cadastrado.");
+                return -1;
+            } else {
+                System.out.println("Digite o índice do veículo em questão.");
+                for (int i = 0; i < tamanhoListaVeiculos; i++) {
+                    System.out.println("(" + i + ") - " +
+                            listaVeiculosTemp.get(i).getMarca() +
+                            listaVeiculosTemp.get(i).getModelo() +
+                            listaVeiculosTemp.get(i).getPlaca());
+                }
+                int indiceVeiculo = scan.nextInt();
+                scan.nextLine();
+                return indiceVeiculo;
+            }
         }
     }
 
@@ -75,7 +96,7 @@ public class AppMain {
      * do usuário todas as informações necessárias
      * para o cadastro de um novo veículo
      */
-    public static void cadastrarVeiculo(Seguradora seguradoraDesejada, int indiceCliente) {
+    public static void cadastrarVeiculo(Seguradora seguradoraDesejada, Cliente cliente) {
         System.out.println("Digite a placa do veículo: ");
         String placa = scan.nextLine();
         System.out.println("Digite a marca do veículo: ");
@@ -90,7 +111,13 @@ public class AppMain {
                                         marca,
                                         modelo,
                                         anoFabricacao);
-        boolean temp = seguradoraDesejada.getListaClientes().get(indiceCliente).getListaVeiculos().add(novoVeiculo);
+        
+        if (cliente instanceof ClientePF) {
+            ((ClientePF) cliente).getListaVeiculos().add(novoVeiculo);
+        } else {
+            int indiceFrota = ((ClientePJ) cliente).escolheFrota();
+            ((ClientePJ) cliente).getListaFrotas().get(indiceFrota).getListaVeiculos().add(novoVeiculo);
+        }
     }
 
 
@@ -123,12 +150,12 @@ public class AppMain {
      * remove o veículo desejado 
      */
     public static boolean removerVeiculo(Seguradora seguradoraCliente) {
-        int indiceVeiculo, indiceFrota, indiceCliente = seguradoraCliente.escolheCliente();
+        int indiceFrota, indiceCliente = seguradoraCliente.escolheCliente();
         if (seguradoraCliente.getListaClientes().get(indiceCliente) instanceof ClientePF) {
-            seguradoraCliente.getListaClientes().get(indiceCliente).removeVeiculo();
+            ((ClientePF) seguradoraCliente.getListaClientes().get(indiceCliente)).removerVeiculo();
         } else {
-            indiceFrota = seguradoraCliente.getListaClientes().get(indiceCliente).escolheFrota();
-            seguradoraCliente.getListaClientes().get(indiceCliente).getListaFrotas().get(indiceFrota).removeVeiculo;
+            indiceFrota = ((ClientePJ) seguradoraCliente.getListaClientes().get(indiceCliente)).escolheFrota();
+            ((ClientePJ) seguradoraCliente.getListaClientes().get(indiceCliente)).getListaFrotas().get(indiceFrota).removeVeiculo();
         }
         return true;
     }
@@ -294,20 +321,18 @@ public class AppMain {
                             break;
 
                         case LISTAR_VEICULOS_POR_CLIENTE:
-                            ArrayList<Veiculo> listaVeiculoTemp;
+                            ArrayList<Veiculo> listaVeiculosTemp;
                             for (Seguradora seguradora : listaSeguradoras) {
                                 listaClientesTemp = seguradora.getListaClientes();
                                 for (j = 0; j < listaClientesTemp.size(); j++) {
                                     if (listaClientesTemp.get(j) instanceof ClientePF) {
-                                        listaVeiculoTemp = listaClientesTemp.get(j).getListaVeiculos();
+                                        listaVeiculosTemp = ((ClientePF) listaClientesTemp.get(j)).getListaVeiculos();
                                         System.out.println("--- Veículos do cliente " + listaClientesTemp.get(j).getNome() + " ---");
                                         for (Veiculo veiculo : listaVeiculosTemp) {
                                             System.out.println(veiculo);
                                         }
                                     } else {
-                                        for (Frota frota : listaClientesTemp.get(j).getListaFrotas()) {
-                                            frota.getVeiculosPorFrota();
-                                        }
+                                        ((ClientePJ) listaClientesTemp.get(j)).getVeiculosPorFrota();
                                     }
                                 }
                             }
@@ -318,12 +343,12 @@ public class AppMain {
                                 listaClientesTemp = seguradora.getListaClientes();
                                 System.out.println("--- Veículos da seguradora " + listaSeguradoras.get(i).getNome());
                                 for (j = 0; j < listaClientesTemp.size(); j++) {
-                                    if (listaCLientesTemp.get(j) instanceof Cliente PF) {
-                                        for (Veiculo veiculo : listaClientesTemp.get(j).getListaVeiculos()) {
+                                    if (listaClientesTemp.get(j) instanceof ClientePF) {
+                                        for (Veiculo veiculo : ((ClientePF) listaClientesTemp.get(j)).getListaVeiculos()) {
                                             System.out.println(veiculo);
                                         }
                                     } else {
-                                        for (Frota frota : listaClientesTemp.getListaFrotas()) {
+                                        for (Frota frota : ((ClientePJ) listaClientesTemp.get(j)).getListaFrotas()) {
                                             for (Veiculo veiculo : frota.getListaVeiculos()) {
                                                 System.out.println(veiculo);
                                             }
@@ -372,22 +397,12 @@ public class AppMain {
                 
                 case GERAR_SINISTRO:
                     i = escolheSeguradora();
-                    int indiceCliente = listaSeguradoras.get(i).escolheCliente();
-                    if (indiceCliente >= 0) {
-                        System.out.println("O veículo associado ao novo sinistro já está cadastrado (1) ou não (2)?");
-                        int condicaoVeiculo = scan.nextInt();
-                        scan.nextLine();
-                        if (condicaoVeiculo == 1) {
-                            int indiceVeiculo = escolheVeiculo(listaSeguradoras.get(i), listaSeguradoras.get(i).escolheCliente());
-                            listaSeguradoras.get(i).gerarSinistro(listaSeguradoras.get(i).getListaClientes().get(indiceCliente).getListaVeiculos().get(indiceVeiculo), 
-                                                                    listaSeguradoras.get(i).getListaClientes().get(indiceCliente));
-                        } else if (condicaoVeiculo == 2) {
-                            cadastrarVeiculo(listaSeguradoras.get(i), indiceCliente);
-                            int tamanhoListaVeiculos = listaSeguradoras.get(i).getListaClientes().get(indiceCliente).getListaVeiculos().size();
-                            listaSeguradoras.get(i).gerarSinistro(listaSeguradoras.get(i).getListaClientes().get(indiceCliente).getListaVeiculos().get(tamanhoListaVeiculos - 1), 
-                                                                    listaSeguradoras.get(i).getListaClientes().get(indiceCliente));
-                        }
+                    int indiceSeguro = listaSeguradoras.get(i).escolheSeguro();
+                    if (indiceSeguro < 0) {
+                        System.out.println("Por favor tente novamente.");
+                        break;
                     }
+                    listaSeguradoras.get(i).getListaSeguros().get(indiceSeguro).gerarSinistro();
                     break;
 
                 case TRANSFERIR_SEGURO:
