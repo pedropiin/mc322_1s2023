@@ -31,6 +31,12 @@ public class Frota {
 
     //INÍCIO DOS MÉTODOS NÃO PADRÕES
 
+    /*
+     * Método que solicita ao usuário todas as informações
+     * necessárias para a criação de um veículo. Assim,
+     * instancia um objeto dessa classe e o adiciona na 
+     * lista de veículos da frota
+     */
     public boolean addVeiculo() {
         System.out.println("Digite a placa do veículo: ");
         String placa = scan.nextLine();
@@ -50,6 +56,11 @@ public class Frota {
         return true;
     }
 
+    /*
+     * Método que mostra ao usuário todas os veículos cadastradas
+     * no cliente e retorna um inteiro que representa
+     * o índice do veículo que o usuário deseja utilizar
+     */
     public int escolheVeiculo() {
         int indiceVeiculo, numVeiculos = listaVeiculos.size();
         if (numVeiculos == 0) {
@@ -67,6 +78,11 @@ public class Frota {
         }
     }
 
+    /*
+     * Método que gera uma string de 20 caracteres,
+     * intercalando entre maiúsculos e minúsculos,
+     * de modo a criar um código aleatório para cada frota
+     */
     public String geraCode() {
         Random rand = new Random();
         String code = "";
@@ -86,6 +102,10 @@ public class Frota {
         return code;
     }
 
+    /*
+     * Método que solicita ao usuário o veículo que deseja
+     * remover e o tira da lista de veículos da frota
+     */
     public boolean removeVeiculo() {
         int indiceVeiculo = escolheVeiculo();
         if (indiceVeiculo >= 0) {

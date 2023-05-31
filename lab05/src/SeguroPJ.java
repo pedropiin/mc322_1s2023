@@ -6,15 +6,15 @@ public class SeguroPJ extends Seguro {
     public Frota frota;
     public ClientePJ cliente;
 
-    public SeguroPJ(int valorMensal,
-                    LocalDate dataInicio,
+    public SeguroPJ(LocalDate dataInicio,
                     LocalDate dataFim,
                     Seguradora seguradora,
                     ArrayList<Sinistro> listaSinistros,
                     ArrayList<Condutor> listaCondutores, 
                     Frota frota,
                     ClientePJ cliente) {
-        super(valorMensal, dataInicio, dataFim, seguradora, listaSinistros, listaCondutores);
+        super(dataInicio, dataFim, seguradora, listaSinistros, listaCondutores);
+        super.setValorMensal(this.calcularValor());
         this.frota = frota;
         this.cliente = cliente;
     }
@@ -42,6 +42,11 @@ public class SeguroPJ extends Seguro {
 
     //INÍCIO DOS MÉTODOS NÃO PADRÕES
 
+    /*
+     * Método que calcula e retorna o valor de um seguro
+     * de pessoa jurídica, levando em consideração diversos
+     * fatores
+     */
     public double calcularValor() {
         int quantidadeFuncionarios = cliente.getQuantidadeFuncs();
         int quantidadeVeiculos = 0;

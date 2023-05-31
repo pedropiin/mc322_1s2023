@@ -100,7 +100,12 @@ public class ClientePF extends Cliente {
         
         return score;
     }
-
+    
+    /*
+     * Método que recebe do usuário as informações
+     * necessárias e cria um novo veículo,
+     * de modo a adicioná-lo à lista de veículos do cliente
+     */
     public boolean cadastrarVeiculo() {
         System.out.println("Digite a placa do veículo: ");
         String placa = scan.nextLine();
@@ -120,6 +125,12 @@ public class ClientePF extends Cliente {
         return true;
     }
 
+    /*
+     * Método que mostra ao usuário todos os clientes,
+     * e devolve uma entrada inteira que representa
+     * o índice do veículo que o usuário deseja realizar certa
+     * ação
+     */
     public int escolheVeiculo() {
         int indiceVeiculo, numVeiculos = listaVeiculos.size();
         if (numVeiculos == 0) {
@@ -137,6 +148,10 @@ public class ClientePF extends Cliente {
         }
     }
 
+    /*
+     * Método que remove um veículo da lista de 
+     * veículos do cliente físico em questão
+     */
     public boolean removerVeiculo() {
         int indiceVeiculo = escolheVeiculo();
         if (indiceVeiculo >= 0) {

@@ -194,7 +194,7 @@ public class AppMain {
      * em operações de acordo com o enum MenuOperacoes
      */
     public static void menuInterativo() {
-        int entradaPrimaria, entradaTemp, i = 0, j = 0, h = 0;
+        int entradaPrimaria, entradaTemp, i = 0, j = 0;
         boolean loop = true;
         double entradaSecundaria;
         MenuOperacoes comandoPrimario, comandoSecundario;
@@ -220,7 +220,9 @@ public class AppMain {
                                         "[1] - Cadastrar Cliente PF/PJ\n" + 
                                         "[2] - Cadastrar Veiculo\n" + 
                                         "[3] - Cadastrar Seguradora\n" + 
-                                        "[4] - Voltar");
+                                        "[4] - Cadastrar Frota\n" +
+                                        "[5] - Cadastrar Condutor\n" + 
+                                        "[6] - Voltar");
                     entradaSecundaria = scan.nextDouble();
                     scan.nextLine();
                     entradaSecundaria = entradaPrimaria + entradaSecundaria / 10;
@@ -248,13 +250,13 @@ public class AppMain {
                             i = escolheSeguradora();
                             if (i >= 0) {
                                 Seguradora seguradoraVeiculo = listaSeguradoras.get(i);
-                                int indiceCliente = listaSeguradoras.get(i).escolheCliente();
+                                int indiceCliente = seguradoraVeiculo.escolheCliente();
                                 if (indiceCliente >= 0) {
-                                    if (listaSeguradoras.get(i).getListaClientes().get(indiceCliente) instanceof ClientePF) {
-                                        ((ClientePF) listaSeguradoras.get(i).getListaClientes().get(indiceCliente)).cadastrarVeiculo();
+                                    if (seguradoraVeiculo.getListaClientes().get(indiceCliente) instanceof ClientePF) {
+                                        ((ClientePF) seguradoraVeiculo.getListaClientes().get(indiceCliente)).cadastrarVeiculo();
                                     } else {
-                                        int indiceFrota = ((ClientePJ) listaSeguradoras.get(i).getListaClientes().get(indiceCliente)).escolheFrota();
-                                        ((ClientePJ) listaSeguradoras.get(i).getListaClientes().get(indiceCliente)).getListaFrotas().get(indiceFrota).addVeiculo();
+                                        int indiceFrota = ((ClientePJ) seguradoraVeiculo.getListaClientes().get(indiceCliente)).escolheFrota();
+                                        ((ClientePJ) seguradoraVeiculo.getListaClientes().get(indiceCliente)).getListaFrotas().get(indiceFrota).addVeiculo();
                                     }
                                 }
                             }
@@ -262,6 +264,30 @@ public class AppMain {
 
                         case CADASTRAR_SEGURADORA:
                             cadastrarSeguradora();
+                            break;
+                        
+                        case CADASTRAR_FROTA:
+                            i = escolheSeguradora();
+                            if (i >= 0) {
+                                Seguradora seguradoraFrota = listaSeguradoras.get(i);
+                                int indiceCliente = seguradoraFrota.escolheCliente();
+                                if (indiceCliente >= 0) {
+                                    if (seguradoraFrota.getListaClientes().get(indiceCliente) instanceof ClientePF) {
+                                        System.out.println("O cliente selecionado é do tipo físico. Portanto, não é possvível cadastrar uma frota em seu nome. Por favor tente novamente");
+                                    } else {
+                                        ((ClientePJ) seguradoraFrota.getListaClientes().get(indiceCliente)).cadastrarFrota();
+                                    }
+                                }
+                            }
+                            break;
+
+                        case CADASTRAR_CONDUTOR:
+                            i = escolheSeguradora();
+                            if (i >= 0) {
+                                Seguradora seguradoraCondutor = listaSeguradoras.get(i);
+                                int indiceSeguro = seguradoraCondutor.escolheSeguro();
+                                seguradoraCondutor.getListaSeguros().get(indiceSeguro).cadastrarCondutor();
+                            }
                             break;
 
                         case VOLTAR_CADASTRO:
@@ -276,7 +302,8 @@ public class AppMain {
                                         "[3] - Listar Sinistro por Cliente\n" + 
                                         "[4] - Listar Veiculo por Cliente\n" + 
                                         "[5] - Listar Veiculo por Seguradora\n" + 
-                                        "[6] - Voltar");
+                                        "[6] - Listar Seguros por Cliente\n" + 
+                                        "[7] - Voltar");
                     entradaSecundaria = scan.nextDouble();
                     scan.nextLine();
                     entradaSecundaria = entradaPrimaria + entradaSecundaria / 10;
@@ -358,6 +385,22 @@ public class AppMain {
                             }
                             break;
 
+                        case LISTAR_SEGUROS_POR_CLIENTE:
+                            for (Seguradora seguradora: listaSeguradoras) {
+                                for (Cliente cliente : seguradora.getListaClientes()) {
+                                    ArrayList<Seguro> listaSegurosCliente = seguradora.getSegurosPorCliente(cliente);
+                                    if (listaSegurosCliente.size() == 0) {
+                                        System.out.println("O cliente " + cliente.getNome() + " não possui nenhum seguro cadastrado.");
+                                    } else {
+                                        System.out.println("--- Seguros do cliente " + cliente.getNome() + " ---");
+                                        for (Seguro seguro : listaSegurosCliente) {
+                                            System.out.println(seguro);
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+
                         case VOLTAR_LISTAR:
                             break;
                     }
@@ -368,7 +411,10 @@ public class AppMain {
                                         "[1] - Excluir Cliente\n" + 
                                         "[2] - Excluir Veiculo\n" +
                                         "[3] - Excluir Sinistro\n" +
-                                        "[4] - Voltar");
+                                        "[4] - Excluir Seguro\n" +
+                                        "[5] - Excluir Condutor\n" +
+                                        "[6] - Excluir Frota\n" +
+                                        "[7] - Voltar");
                     entradaSecundaria = scan.nextDouble();
                     scan.nextLine();
                     entradaSecundaria = entradaPrimaria + entradaSecundaria / 10;
@@ -388,6 +434,33 @@ public class AppMain {
                         case EXCLUIR_SINISTRO:
                             i = escolheSeguradora();
                             removerSinistro(listaSeguradoras.get(i));
+                            break;
+                        
+                        case EXCLUIR_SEGURO:
+                            i = escolheSeguradora();
+                            listaSeguradoras.get(i).cancelarSeguro();
+                            break;
+
+                        case EXCLUIR_CONDUTOR:
+                            i = escolheSeguradora();
+                            int indiceSeguro = listaSeguradoras.get(i).escolheSeguro();
+                            if (indiceSeguro >= 0) {
+                                listaSeguradoras.get(i).getListaSeguros().get(indiceSeguro).removerCondutor();
+                            }
+                            break;
+
+                        case EXCLUIR_FROTA:
+                            i = escolheSeguradora();
+                            int indiceCliente = listaSeguradoras.get(i).escolheCliente();
+                            if (indiceCliente >= 0) {
+                                if (listaSeguradoras.get(i).getListaClientes().get(indiceCliente) instanceof ClientePJ) {
+                                    ClientePJ clienteExcluirFrota = ((ClientePJ) listaSeguradoras.get(i).getListaClientes().get(indiceCliente));
+                                    int indiceFrota = clienteExcluirFrota.escolheFrota();
+                                    clienteExcluirFrota.getListaFrotas().remove(indiceFrota);
+                                } else {
+                                    System.out.println("O cliente selecionado é do tipo físico. Portanto, não é possvível cadastrar uma frota em seu nome. Por favor tente novamente");
+                                }
+                            }
                             break;
 
                         case VOLTAR_EXCLUIR:
@@ -446,10 +519,6 @@ public class AppMain {
                                                 new ArrayList<Seguro>(),
                                                 "45.380.783/0001-14");
 
-        LocalDate dataLicenca = LocalDate.now();
-        LocalDate dataNascimento = LocalDate.of(2004, 04, 19);
-        LocalDate dataFundacao = LocalDate.of(1994, 07, 5);
-
         ClientePF clientePF1 = new ClientePF("Pedro da Rosa",
                                             "Rua Pascal 99",
                                             "11995807321",
@@ -507,9 +576,9 @@ public class AppMain {
                                                 "Subaru",
                                                 "WRX",
                                                 1995);
-
-        //ADICIONANDO AS SEGURAODAS E CLIENTES À LISTA DE SEGURADORAS
-            //duas seguradoras, cada uma com um cliente físico e um jurídico
+                                                
+                                                //ADICIONANDO AS SEGURAODAS E CLIENTES À LISTA DE SEGURADORAS
+                                                //duas seguradoras, cada uma com um cliente físico e um jurídico
         listaSeguradoras.add(seguradora1);
         listaSeguradoras.get(0).getListaClientes().add(clientePF1);
         listaSeguradoras.get(0).getListaClientes().add(clientePJ1);
@@ -517,14 +586,22 @@ public class AppMain {
         listaSeguradoras.get(1).getListaClientes().add(clientePF2);
         listaSeguradoras.get(1).getListaClientes().add(clientePJ2);
 
+        //ADICIONANDO OS VEÍCULOS AOS CLIENTES FÍSICOS
+        ((ClientePF) listaSeguradoras.get(0).getListaClientes().get(0)).getListaVeiculos().add(veiculoClientePF1);
+        ((ClientePF) listaSeguradoras.get(1).getListaClientes().get(0)).getListaVeiculos().add(veiculoClientePF2);
+        
+        //CRIANDO FROTA
+        ((ClientePJ) listaSeguradoras.get(0).getListaClientes().get(1)).cadastrarFrota();
+        ((ClientePJ) listaSeguradoras.get(1).getListaClientes().get(1)).cadastrarFrota();
+
+        //ADICIONANDO OS VEÍCULOS ÀS FROTAS
+        ((ClientePJ) listaSeguradoras.get(0).getListaClientes().get(1)).getListaFrotas().get(0).getListaVeiculos().add(veiculoClientePJ1);
+        ((ClientePJ) listaSeguradoras.get(1).getListaClientes().get(1)).getListaFrotas().get(0).getListaVeiculos().add(veiculoClientePJ2);
+
         //GERANDO SEGUROS
         listaSeguradoras.get(0).gerarSeguro();
         listaSeguradoras.get(1).gerarSeguro();
-
-        //GERANDO SINISTROS
-        listaSeguradoras.get(0).getListaSeguros().get(0).gerarSinistro();
-        listaSeguradoras.get(1).getListaSeguros().get(0).gerarSinistro();
-
+        
         //GERANDO CONDUTORES
         Condutor condutorSeguradora1 = new Condutor("449.219.868-78",
                                                     "Pedro",
@@ -545,20 +622,9 @@ public class AppMain {
         listaSeguradoras.get(0).getListaSeguros().get(0).getListaCondutores().add(condutorSeguradora1);
         listaSeguradoras.get(1).getListaSeguros().get(0).getListaCondutores().add(condutorSeguradora2);
 
-        //CRIANDO FROTA
-        ((ClientePJ) listaSeguradoras.get(0).getListaClientes().get(1)).cadastrarFrota();
-        ((ClientePJ) listaSeguradoras.get(1).getListaClientes().get(1)).cadastrarFrota();
-
-
-        //ADICIONANDO OS VEÍCULOS AOS CLIENTES FÍSICOS
-        ((ClientePF) listaSeguradoras.get(0).getListaClientes().get(0)).getListaVeiculos().add(veiculoClientePF1);
-        ((ClientePF) listaSeguradoras.get(1).getListaClientes().get(0)).getListaVeiculos().add(veiculoClientePF2);
-
-
-        //ADICIONANDO OS VEÍCULOS ÀS FROTAS
-        ((ClientePJ) listaSeguradoras.get(0).getListaClientes().get(1)).getListaFrotas().get(0).getListaVeiculos().add(veiculoClientePJ1);
-        ((ClientePJ) listaSeguradoras.get(1).getListaClientes().get(1)).getListaFrotas().get(0).getListaVeiculos().add(veiculoClientePJ2);
-
+        //GERANDO SINISTROS
+        listaSeguradoras.get(0).getListaSeguros().get(0).gerarSinistro();
+        listaSeguradoras.get(1).getListaSeguros().get(0).gerarSinistro();
 
         //TO STRING DE CADA CLASSE
         System.out.println("TO STRING DA SEGURADORA");
@@ -574,7 +640,7 @@ public class AppMain {
         System.out.println("TO STRING DO SEGURO FÍSICO");
         System.out.println(listaSeguradoras.get(0).getListaSeguros().get(0));
         System.out.println("TO STRING DO SEGURO JUŔIDICO");
-        System.out.println(listaSeguradoras.get(0).getListaSeguros().get(1));
+        System.out.println(listaSeguradoras.get(0).getListaSeguros().get(0));
         System.out.println("TO STRING DO SINISTRO");
         System.out.println(listaSeguradoras.get(0).getListaSeguros().get(0).getListaSinistros().get(0));
         System.out.println("TO STRING DO VEÍCULO");
@@ -584,27 +650,26 @@ public class AppMain {
         
             //gerarSeguro já foi utilizado
         
-            //cadastrarCliente já foi utilizado
-        listaSeguradoras.get(0).cadastrarCliente("pf");
+        //     //cadastrarCliente 
+        // listaSeguradoras.get(0).cadastrarCliente("pf");
 
-            //listarClientes
-        listaSeguradoras.get(0).listarClientes("pf");
+        //     //listarClientes
+        // listaSeguradoras.get(0).listarClientes("pf");
 
-            //cancelarSeguro
-        listaSeguradoras.get(0).cancelarSeguro();
+        //     //cancelarSeguro
+        // listaSeguradoras.get(0).cancelarSeguro();
 
-            //removerCliente
-        listaSeguradoras.get(0).removerCliente();
+        //     //removerCliente
+        // listaSeguradoras.get(0).removerCliente();
 
-            //getSegurosPorCliente
-        ArrayList<Seguro> listaSegurosTemp = listaSeguradoras.get(0).getSegurosPorCliente(clientePF1);
+        //     //getSegurosPorCliente
+        // ArrayList<Seguro> listaSegurosTemp = listaSeguradoras.get(0).getSegurosPorCliente(clientePF1);
 
-            //getSinistrosPorCliente
-        ArrayList<Sinistro> listaSinistrosTemp = listaSeguradoras.get(0).getSinistrosPorCliente(clientePF1);
+        //     //getSinistrosPorCliente
+        // ArrayList<Sinistro> listaSinistrosTemp = listaSeguradoras.get(0).getSinistrosPorCliente(clientePF1);
 
-            // calcularReceita
-        System.out.println(listaSeguradoras.get(0).calcularReceita());
-
+        //     // calcularReceita
+        // System.out.println(listaSeguradoras.get(0).calcularReceita());
 
         menuInterativo();
     }

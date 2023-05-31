@@ -67,6 +67,11 @@ public class ClientePJ extends Cliente {
 
     //INÍCIO DOS MÉTODOS NÃO PADRÕES
 
+    /*
+     * Método que atualiza uma frota inputada pelo usuário,
+     * de modo a permitir que ele adicione ou remova um veículo,
+     * ou remova uma frota
+     */
     public boolean atualizarFrota() {
         int entrada, indiceFrota = escolheFrota();
         System.out.println("Selecione a função desejada?\n" + 
@@ -89,6 +94,10 @@ public class ClientePJ extends Cliente {
         return true;
     }
 
+    /*
+     * Método que instancia uma nova frota e 
+     * a adiciona na lista de frotas do cliente
+     */
     public boolean cadastrarFrota() {
         Frota novaFrota = new Frota(new ArrayList<Veiculo>());
         listaFrotas.add(novaFrota);
@@ -96,6 +105,11 @@ public class ClientePJ extends Cliente {
         return true;
     }
 
+    /*
+     * Método que mostra ao usuário todas as frotas cadastradas
+     * no cliente e retorna um inteiro que representa
+     * o índice da frota que o usuário deseja utilizar
+     */
     public int escolheFrota() {
 		int indiceFrota;
 		System.out.println("Selecione a frota desejada.");
@@ -108,6 +122,10 @@ public class ClientePJ extends Cliente {
 		return indiceFrota;
 	}
 
+    /*
+     * Método que printa todos os veículos associados
+     * a cada frota do cliente em questão
+     */
     public boolean getVeiculosPorFrota() {
         if (listaFrotas.size() == 0) {
             System.out.println("O cliente " + getNome() + " não possui nenhuma frota cadastrada.");

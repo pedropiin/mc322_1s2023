@@ -1,6 +1,5 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
 
@@ -166,6 +165,11 @@ public class Seguradora {
 		return receita;
 	}
 
+	/*
+	 * Método que cancela um seguro associado à seguradora
+	 * em questão. Para isso, pergunta ao usuário qual
+	 * seguro ele deseja remover
+	 */
 	public boolean cancelarSeguro() {
 		int indiceSeguro;
 		if (getListaSeguros().size() == 0) {
@@ -194,7 +198,7 @@ public class Seguradora {
 			System.out.println("A seguradora escolhida ainda não possui nenhum cliente cadastrado. Por favor tente novamente.");
 			return -1;
 		} else {
-			System.out.println("Selecione cliente desejado.");
+			System.out.println("Selecione o cliente desejado.");
 			for (int i = 0; i < getListaClientes().size(); i++) {
 				System.out.println("(" + i + ") - " + getListaClientes().get(i).getNome());
 			}
@@ -204,6 +208,11 @@ public class Seguradora {
 		}
 	}
 
+	/*
+	 * Método que mostra ao usuário todas os seguros cadastradas
+	 * no cliente e retorna um inteiro que representa
+	 * o índice do seguro que o usuário deseja utilizar
+	 */
 	public int escolheSeguro() {
 		if (getListaSeguros().size() == 0) {
 			System.out.println("A seguradora escolhida não possui nenhum seguro cadastrado.");
@@ -219,6 +228,11 @@ public class Seguradora {
 		}
 	}
 
+	/*
+	 * Método que cria um novo seguro para um seguro 
+	 * inputado pelo cliente. Para isso, leva em consideração se
+	 * o cliente é físico ou jurídico.
+	 */
 	public boolean gerarSeguro() {
 		int indiceCliente, indiceVeiculo, indiceFrota;
 		indiceCliente = escolheCliente();
@@ -228,18 +242,33 @@ public class Seguradora {
 			if (listaClientes.get(indiceCliente) instanceof ClientePF) {
 				ClientePF cliente = ((ClientePF) listaClientes.get(indiceCliente));
 				indiceVeiculo = cliente.escolheVeiculo();
-				SeguroPF novoSeguroPF = new SeguroPF(0, LocalDate.now(), LocalDate.now().plusYears(1), this, new ArrayList<Sinistro>(), new ArrayList<Condutor>(), cliente.getListaVeiculos().get(indiceVeiculo), cliente);
-				getListaSeguros().add(novoSeguroPF);
+				if (indiceVeiculo == -1) {
+					return false;
+				} else {
+					System.out.println(cliente.getDataNascimento());
+					SeguroPF novoSeguroPF = new SeguroPF(LocalDate.now(), LocalDate.now().plusYears(1), this, new ArrayList<Sinistro>(), new ArrayList<Condutor>(), cliente.getListaVeiculos().get(indiceVeiculo), cliente);
+					getListaSeguros().add(novoSeguroPF);
+					System.out.println("Novo seguro com id " + novoSeguroPF.getId() + " cadastrado com sucesso em nome de " + listaClientes.get(indiceCliente).getNome() + ".");
+				}
 			} else if (listaClientes.get(indiceCliente) instanceof ClientePJ) {
 				ClientePJ cliente = ((ClientePJ) listaClientes.get(indiceCliente));
 				indiceFrota = cliente.escolheFrota();
-				SeguroPJ novoSeguroPJ = new SeguroPJ(0, LocalDate.now(), LocalDate.now().plusYears(1), this, new ArrayList<Sinistro>(), new ArrayList<Condutor>(), cliente.getListaFrotas().get(indiceFrota), cliente);
-				getListaSeguros().add(novoSeguroPJ);
+				if (indiceFrota == -1) {
+					return false;
+				} else {
+					SeguroPJ novoSeguroPJ = new SeguroPJ(LocalDate.now(), LocalDate.now().plusYears(1), this, new ArrayList<Sinistro>(), new ArrayList<Condutor>(), cliente.getListaFrotas().get(indiceFrota), cliente);
+					getListaSeguros().add(novoSeguroPJ);
+					System.out.println("Novo seguro com id " + novoSeguroPJ.getId() + " cadastrado com sucesso em nome de" + listaClientes.get(indiceCliente).getNome() + ".");
+				}
 			}
 			return true;
 		}
 	}
 
+	/*
+	 * Método que retorna um ArrayList contendo todos os seguros
+	 * associados à um cliente passado como parâmetro
+	 */
 	public ArrayList<Seguro> getSegurosPorCliente(Cliente cliente) {
 		ArrayList<Seguro> listaSegurosCliente = new ArrayList<Seguro>();
 		for (Seguro seguro : listaSeguros) {
@@ -251,6 +280,10 @@ public class Seguradora {
 		return listaSegurosCliente;
 	}
 
+	/*
+	 * Método que retorna um ArrayList contendo todos os sinistros 
+	 * associados à um cliente passado como parâmetro
+	 */
 	public ArrayList<Sinistro> getSinistrosPorCliente(Cliente cliente) {
 		ArrayList<Sinistro> listaSinistrosCliente = new ArrayList<Sinistro>();
 		for (Seguro seguro : getListaSeguros()) {
@@ -301,21 +334,6 @@ public class Seguradora {
 		}
 	}
 
-	public void listarVeiculos() {
-		for (int i = 0; i < listaClientes.size(); i++) {
-			
-		}
-	}
-
-	// /*
-	//  * Método que passa pela lista de sinistros procurando 
-	//  * sinistros associados ao cliente passado como parâmetro.
-	//  * Assim, retorna o número de tais acidentes
-	//  */
-	// public int numSinistrosCliente(Cliente cliente) {
-	// 	int numSinistros = getsini
-	// }
-
 	/*
 	 * Mètodo que recebe o nome de um cliente e passa 
 	 * por toda a listaClientes, procurando um cliente
@@ -329,7 +347,6 @@ public class Seguradora {
 		}
 		return false;
 	}
-
 
 	/*
 	 * Método que recebe uma string contendo o nome de um cliente

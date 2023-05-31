@@ -98,7 +98,11 @@ public class Condutor {
     }
 
     //INÍCIO DOS MÉTODOS NÃO PADRÕES 
-
+    
+    /*
+     * Método que recebe um sinistro como parâmetro e o 
+     * adiciona na lista de sinistros.
+     */
     public void adicionarSinistro(Sinistro novoSinistro) {
         getListaSinistros().add(novoSinistro);
         System.out.println("O sinistro foi adicionado com sucesso.");
