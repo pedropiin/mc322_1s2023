@@ -46,7 +46,7 @@ public class AppMain {
     }
     /*
      * Assim como a escolheCliente e escolheSeguradora,
-     * faz com que o usuário escolha um veículo de um específico
+     * faz com que o usuário escolha um veículo de um específico    
      * cliente, retornando seu índice
      */
     public static int escolheVeiculo(Seguradora seguradoraCliente, Cliente cliente) {
@@ -209,6 +209,8 @@ public class AppMain {
                                 "[4] - Gerar Sinistro\n" + 
                                 "[5] - Transferir Seguro\n" + 
                                 "[6] - Calcular Receita Seguradora\n" + 
+                                "[7] - Autorizar Condutor\n" + 
+                                "[8] - Desautorizar Condutor\n" + 
                                 "[0] - Sair.");
             entradaPrimaria = scan.nextInt();
             scan.nextLine();
@@ -487,6 +489,24 @@ public class AppMain {
                     i = escolheSeguradora();
                     double receitaSeguradora = listaSeguradoras.get(i).calcularReceita();
                     System.out.println("A receita da seguradora " + listaSeguradoras.get(i).getNome() + " é " + receitaSeguradora);
+                    break;
+                
+                case AUTORIZAR_CONDUTOR:
+                    i = escolheSeguradora();
+                    int indiceSeguroAutorizar = listaSeguradoras.get(i).escolheSeguro();
+                    boolean autorizou = listaSeguradoras.get(i).getListaSeguros().get(indiceSeguroAutorizar).autorizarCondutor();
+                    if (autorizou) {
+                        System.out.println("Condutor autorizado com sucesso.");
+                    }
+                    break;
+                
+                case DESAUTORIZAR_CONDUTOR:
+                    i = escolheSeguradora();
+                    int indiceSeguroDesautorizar = listaSeguradoras.get(i).escolheSeguro();
+                    boolean desautorizou = listaSeguradoras.get(i).getListaSeguros().get(indiceSeguroDesautorizar).desautorizarCondutor();
+                    if (desautorizou) {
+                        System.out.println("Condutor desautorizado com sucesso.");
+                    }
                     break;
 
                 case SAIR:
